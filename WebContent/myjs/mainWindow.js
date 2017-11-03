@@ -48,35 +48,62 @@ Ext.onReady(function(){
 			}]
 		});
 	
-	//导航栏
-	var root1 = Ext.create('Ext.tree.Panel',{
-		title:"管理界面",
-		rootVisible:false,//设置根节点是否隐藏
+	//添加一个新的标签页//将其放在一个新的js中为什么不起作用？
+	addTabPage = function(node){
+		//为添加判断，因此如果多次点击会出现多个同样的页面
+		var tabPage = centerPanel.add({
+			title:"" + node.raw.text,
+			html:"新增标签页" + node.raw.text+ "内容",
+			closable:true
+		})
+		centerPanel.setActiveTab(tabPage);
+	
+	};
+		
+	var store = Ext.create('Ext.data.TreeStore', {
 		root:{
+			id:"user",
 			expanded:true,//默认展开根节点
 			children:[{
 				text:"用户管理",
 				leaf:false,//是否是叶子节点
 				expanded:true,
-					children:[{
-						text:"用户信息",
-						leaf:true,
-						url:"user"
-						}]
+				children:[{
+					itemId:"userItem",
+					text:"用户信息",
+					leaf:true,
+					url:"user"
+				}]
 			},{
 				text:"角色管理",
 				leaf:false,
 				expanded:true,
-					children:[{
-						text:"角色信息",
-						leaf:true,
-						url:"jiaose"
-						}]
+				children:[{
+					text:"角色信息",
+					leaf:true,
+					url:"jiaose"
+				}]
 			}]
-		},
-		listeners:{ 
-			itemclick : function(node){
-				Ext.Msg.alert("提示","点击了节点");
+		}
+	});
+		
+	//导航栏
+	var root1 = Ext.create('Ext.tree.Panel',{
+		title:"管理界面",
+		rootVisible:false,//设置根节点是否隐藏
+		//通过数据源的方式将节点添加进来
+		store:store,
+		listeners:{ //添加监听，当按下节点到时候，增加一个标签页
+			itemclick : function(view,node,item,index,e){
+				if(node.get("leaf")){//通过leaf判断，如果是叶子节点，就添加tab页
+					addTabPage(node);//添加新的标签页
+					
+					/* 获取叶子节点的文本值
+					 * alert(record.get("text"));//获取叶子节点的text文本值
+					 * alert(record.raw.text);//获取叶子节点的text文本值
+					 */
+					
+				}
 		} } 
 	});
 	
@@ -126,6 +153,7 @@ Ext.onReady(function(){
 		});
 		return panel;
 	};*/
+	
 	//用变量的方式-对象的引用
 	var westPanel = new Ext.panel.Panel({
 			layout:"accordion",
@@ -142,16 +170,6 @@ Ext.onReady(function(){
 			]
 		});
 		
-	function addTabPage(){
-		var index = centerPanel.items.length + 1;//得到标签页的长度，有几个标签页长度就为几
-		var tabPage = centerPanel.add({
-			title:"新增tab标签页" + index,
-			html:"新增标签页" + index + "内容",
-			closable:true
-		})
-		centerPanel.setActiveTab(tabPage);
-	}
-		
 	var centerPanel = new Ext.tab.Panel({
 			region:"center",
 			height:window.innerHeight - 50,
@@ -162,16 +180,9 @@ Ext.onReady(function(){
 				title:"标签页1",
 				html:"标签页1",
 				closable:true
-			}],
-			buttons:[{
-				xtype:"button",
-				text:"点击添加新页",
-				handler:addTabPage
 			}]
 		});
-		
-	
-	
+
 	var eastPanel = Ext.create('Ext.panel.Panel',{
 		title:"右边",
 		html:"右边",
