@@ -2,8 +2,6 @@ Ext.onReady(function(){
 	
 	Ext.QuickTips.init();
 	
-	
-	
 	/*var mainWindow = new Ext.window.Window({
 		renderTo:Ext.getBody(),
 		width:window.innerWidth,
@@ -32,6 +30,7 @@ Ext.onReady(function(){
 		});
 	};
 	
+	/* 主题栏 */
 	var northPanel = new Ext.panel.Panel({
 			region:"north",
 			height:70,
@@ -48,40 +47,42 @@ Ext.onReady(function(){
 			}]
 		});
 	
-	//添加一个新的标签页//将其放在一个新的js中为什么不起作用？
-	addTabPage = function(node){
-		//为添加判断，因此如果多次点击会出现多个同样的页面
-		var tabPage = centerPanel.add({
-			title:"" + node.raw.text,
-			html:"新增标签页" + node.raw.text+ "内容",
-			closable:true
-		})
-		centerPanel.setActiveTab(tabPage);
-	
-	};
-		
+	/* 节点数据源 */
 	var store = Ext.create('Ext.data.TreeStore', {
 		root:{
-			id:"user",
 			expanded:true,//默认展开根节点
 			children:[{
+				id:"userManage",
 				text:"用户管理",
 				leaf:false,//是否是叶子节点
 				expanded:true,
 				children:[{
-					itemId:"userItem",
+					id:"userInfo",
 					text:"用户信息",
 					leaf:true,
-					url:"user"
+					url:"userInfo"
 				}]
 			},{
+				id:"deparManage",
+				text:"部门管理",
+				leaf:false,
+				expanded:true,
+				children:[{
+					id:"deparInfo",
+					text:"部门信息",
+					leaf:true,
+					url:"deparInf"
+				}]
+			},{
+				id:"roleManage",
 				text:"角色管理",
 				leaf:false,
 				expanded:true,
 				children:[{
+					id:"roleInfo",
 					text:"角色信息",
 					leaf:true,
-					url:"jiaose"
+					url:"roleInf"
 				}]
 			}]
 		}
@@ -97,19 +98,17 @@ Ext.onReady(function(){
 			itemclick : function(view,node,item,index,e){
 				if(node.get("leaf")){//通过leaf判断，如果是叶子节点，就添加tab页
 					addTabPage(node);//添加新的标签页
-					
 					/* 获取叶子节点的文本值
 					 * alert(record.get("text"));//获取叶子节点的text文本值
 					 * alert(record.raw.text);//获取叶子节点的text文本值
 					 */
-					
 				}
 		} } 
 	});
 	
 	var root2 = Ext.create('Ext.tree.Panel',{
 		title:"其他",
-		fields:["name","description"],
+		fields:["name","description"],//字段
 		columns:[{
 			xtype:"treecolumn",//树状表格列表
 			text:"名称",
@@ -170,25 +169,5 @@ Ext.onReady(function(){
 			]
 		});
 		
-	var centerPanel = new Ext.tab.Panel({
-			region:"center",
-			height:window.innerHeight - 50,
-			width:window.innerwidth - 200,
-			frame:true,
-			//添加标签页
-			items:[{
-				title:"标签页1",
-				html:"标签页1",
-				closable:true
-			}]
-		});
-
-	var eastPanel = Ext.create('Ext.panel.Panel',{
-		title:"右边",
-		html:"右边",
-		width:100,
-		height:200
-	});
-
 	creatViewport();
 })
