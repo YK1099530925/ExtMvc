@@ -90,7 +90,7 @@ Ext.onReady(function(){
 				
 				/*//获取字段的方式
 				var formFields = loginform.getForm().getValues();
-				alert(formFields["username"]);*/
+				alert(formFields["username"]);*///或者fromFields.username
 				
 				
 				/*//Ajax请求

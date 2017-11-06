@@ -1,27 +1,20 @@
-var datas = [
-	["101","张三","23","管理员"],
-	["102","李四","24","超级管理员"],
-	["103","王五","25","员工"]
-]
-
 var userDatas = {
-	"total": 3,
 	"rows":[
 		{
-			"id":"101",
-			"name":"张三",
+			"id":"1",
+			"username":"张三",
 			"age":"23",
 			"role":"管理员"
 		},
 		{
-			"id":"102",
-			"name":"李四",
+			"id":"2",
+			"username":"李四",
 			"age":"24",
 			"role":"超级管理员"
 		},
 		{
-			"id":"103",
-			"name":"王五",
+			"id":"3",
+			"username":"王五",
 			"age":"25",
 			"role":"员工"
 		}
@@ -31,12 +24,11 @@ var userDatas = {
 var store = new Ext.data.JsonStore({
 	fields:[
 		{name:"id"},
-		{name:"name"},
+		{name:"username"},
 		{name:"age"},
 		{name:"role"}
 	],
 	autoLoad:true,
-	totalProperty: "total",
 	data:userDatas,
     proxy: {
         type: 'memory',
@@ -54,17 +46,19 @@ var selModel = new Ext.selection.CheckboxModel({
 });
 
 var submit = function(){
-	var form = addPanel.getForm();
-	var userRecord = Ext.data.Model([
-		{name:"id"},
-		{name:"name"},
-		{name:"age"},
-		{name:"role"}
-	]);
-/*	var formFields = addPanel.getValues();
-	formFields.id = store.data.length + 1 ;
-	var rec = new userRecord(formFields,formFields.id);*/
-	//store.add();
+	var formFields = addPanel.getForm().getValues();
+	var id = store.data.length + 1;
+	var username = formFields.username;
+	var age = formFields.age;
+	var role = formFields.role;
+	var rec = Ext.data.Model({
+		id:id,
+		username:username,
+		age:age,
+		role:role
+	});
+	
+	store.add(rec);
 	addWindow.hide();
 };
 
@@ -158,7 +152,7 @@ userPanel = new Ext.grid.Panel({
 	selModel:selModel,
 	columns:[
 		{header:"ID",flex:1,dataIndex:"id",sortable:true},
-		{header:"姓名",flex:1,dataIndex:"name",sortable:true},
+		{header:"姓名",flex:1,dataIndex:"username",sortable:true},
 		{header:"年龄",flex:1,dataIndex:"age",sortable:true},
 		{header:"角色",flex:1,dataIndex:"role",sortable:true}
 	]
