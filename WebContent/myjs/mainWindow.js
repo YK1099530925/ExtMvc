@@ -23,8 +23,8 @@ Ext.onReady(function(){
 				collapsible:true
 			},
 			items:[
-				northPanel,//这是一个函数，返回一个panel，这个函数相当于对象
-				westPanel,//这是一个变量
+				northPanel,
+				westPanel,
 				centerPanel
 			]
 		});

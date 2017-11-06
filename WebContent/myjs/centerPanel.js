@@ -5,8 +5,8 @@
 			frame:true,
 			//添加标签页
 			items:[{
-				title:"标签页1",
-				html:"标签页1",
+				title:"首页",
+				html:"欢迎来到首页",
 				closable:true
 			}]
 		});

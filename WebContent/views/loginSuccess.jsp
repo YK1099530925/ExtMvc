@@ -7,6 +7,7 @@
 <script type="text/javascript" src="../extjs/ext-all-debug.js"></script>
 <link rel="stylesheet" type="text/css" href="../resources/css/ext-all.css">
 <link rel="stylesheet" type="text/css" href="../css/main.css">
+<script type="text/javascript" src="../myjs/user.js"></script>
 <script type="text/javascript" src="../myjs/centerPanel.js"></script>
 <script type="text/javascript" src="../myjs/addTabPage.js"></script>
 <script type="text/javascript" src="../myjs/mainWindow.js"></script>

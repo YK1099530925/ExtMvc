@@ -5,6 +5,16 @@
 	 * mainWindow.js之前引用addTabPage.js，所以在加载addTabPage.js之后，其中没有
 	 * centerPanel，所以addTabPage始终都显示未定义
 	 * */
+	//判断是哪个页面，显示其内容
+	whatPage = function(nodeId){
+		if(nodeId == "userInfo"){
+			return userPanel;
+		}else if(nodeId == "deparInfo"){
+			return "";
+		}else{
+			return "";
+		}
+	};
 	
 	/* 添加一个新的标签页 */	
 	addTabPage = function(node){
@@ -42,8 +52,9 @@
 				id:nodeId,//如果是新的tab标签页，则给他的id设置为节点的id
 				title:node.raw.text,
 				closable:true,//是否可以关闭
+				items:whatPage(nodeId)
 				//加载页面中的内容使用autoLoad
-				autoLoad:"../myjs/user.js"
+				//autoLoad:""//当在这儿填../myjs/user.js显示的是user.js中的代码，即autoLoad加载的是页面的数据
 			})
 			centerPanel.setActiveTab(tabPage);
 		}

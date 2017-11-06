@@ -1,2 +1,6 @@
 
 .main-logo {float:left;display:block;margin:5px 3px;height:30px;}
+
+.btn-add {background-image:url("../imgs/icon-add.png");}
+.btn-edit {background-image:url("../imgs/icon-edit.png");}
+.btn-del {background-image:url("../imgs/icon-del.png");}
