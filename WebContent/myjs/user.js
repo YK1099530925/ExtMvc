@@ -21,6 +21,28 @@ var userDatas = {
 	]
 }
 
+/* Store数据源的定义
+ * 1）ArrayStore适合用来读取数组类型的数据
+ * 	数组的fields:["id","username","age","role"]
+ *  数组的data:[
+ *  			["1","杨宽","21","管理员"]
+ *  		  ]
+ * 2）JsonStore用来读取json格式的数据
+ * 	json的格式如下
+ * 	json格式的字段定义还可以指定类型，例如：年龄必须是一个int型
+ * 	fields:[
+ * 				{"id","name",
+ * 					{name:"age",type:"int"},
+ * 				 	"role"
+ * 				}
+ * 			]
+ * 3）JsonStore使用远程数据时，只需要指定url和fields字段，接下来
+ * 的事情JsonStore会自动处理，例
+ * 	var userJson = Ext.data.JsonStore({
+ * 		fields:["id","name","age","role"],
+ * 		url:"...."
+ * });
+ * */
 var store = new Ext.data.JsonStore({
 	fields:[
 		{name:"id"},
@@ -92,9 +114,27 @@ var addPanel = new Ext.form.Panel({
 			name:"age",
 			fieldLabel:"年龄"
 		},{
+			/*combo用来显示下拉框与分页功能
+			 * 如果从远程加载数据较多，可以使用分页功能
+			 * 设置pageSize，然后还需要返回数据的总条数，
+			 * 这样JsonStore才能计算分页*/
+			xtype:"combo",
 			id:"role",
 			name:"role",
-			fieldLabel:"角色"
+			fieldLabel:"角色",
+			store:new Ext.data.ArrayStore({
+				autoLoad:true,
+				fields:["fid","frole"],
+				data:[
+					["0","超级管理员"],
+					["1","管理员"],
+					["2","员工"]
+				]
+			}),
+			displayField:"frole",//使用哪个字段作为标签菜单
+			mode:"local",//数据源来自本地
+			typeAhead:false,//是否会自动填充
+			forceSelection:true//是否强制用户只能通过选择的方式交互
 		}
 	],
 	buttons:[
@@ -149,6 +189,7 @@ userPanel = new Ext.grid.Panel({
 		stripeRows:true
 	},
 	store:store,
+	mode:"local",
 	selModel:selModel,
 	columns:[
 		{header:"ID",flex:1,dataIndex:"id",sortable:true},
