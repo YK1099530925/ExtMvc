@@ -1,0 +1,12 @@
+git更新本地仓库
+一：fetch从远程获取最新到本地，不会自动merge（合并）
+1：查看远程仓库	
+	$ git remote -v
+2：从远程获取最新版本到本地
+	$ git fetch origin master
+3：比较本地的仓库和远程参考的区别
+	$ git log -p master.. origin/master（英文状态下按q结束日志查看）
+4. 把远程下载下来的代码合并到本地仓库，远程的和本地的合并
+	$ git merge origin/master
+二：pull从远程获取最新到本地，并自动merge
+git pull origin master
