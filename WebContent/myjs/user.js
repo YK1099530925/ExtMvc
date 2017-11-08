@@ -4,19 +4,19 @@ var userDatas = {
 			"id":"1",
 			"username":"张三",
 			"age":"23",
-			"role":"管理员"
+			"userrole":"管理员"
 		},
 		{
 			"id":"2",
 			"username":"李四",
 			"age":"24",
-			"role":"超级管理员"
+			"userrole":"超级管理员"
 		},
 		{
 			"id":"3",
 			"username":"王五",
 			"age":"25",
-			"role":"员工"
+			"userrole":"员工"
 		}
 	]
 }
@@ -44,19 +44,20 @@ var userDatas = {
  * });
  * */
 var store = new Ext.data.JsonStore({
+	autoLoad:true,
 	fields:[
 		{name:"id"},
 		{name:"username"},
 		{name:"age"},
-		{name:"role"}
+		{name:"userrole"}
 	],
-	autoLoad:true,
-	data:userDatas,
-    proxy: {
-        type: 'memory',
-        reader: {
+    proxy:{
+    	type: 'ajax',
+    	//method:"get",
+    	url:"../data/user.json",
+        reader: {//reader解析器，解析json，array等数据
             type: 'json',
-            root: 'rows'
+            root: 'users'
         }
     }
 });
@@ -72,7 +73,7 @@ var submit = function(){
 	var id = store.data.length + 1;
 	var username = formFields.username;
 	var age = formFields.age;
-	var role = formFields.role;
+	var role = formFields.userrole;
 	var rec = Ext.data.Model({
 		id:id,
 		username:username,
@@ -119,8 +120,8 @@ var addPanel = new Ext.form.Panel({
 			 * 设置pageSize，然后还需要返回数据的总条数，
 			 * 这样JsonStore才能计算分页*/
 			xtype:"combo",
-			id:"role",
-			name:"role",
+			id:"userrole",
+			name:"userrole",
 			fieldLabel:"角色",
 			store:new Ext.data.ArrayStore({
 				autoLoad:true,
@@ -176,7 +177,16 @@ userPanel = new Ext.grid.Panel({
 		},{
 			text:"编辑",
 			iconCls:"btn-edit",
-			handler:function(){}
+			handler:function(){
+				Ext.Ajax.request({
+					method:"get",
+					url:"userDataSelect",//url不能进入springmvc
+					params:{},
+					callback:function(options,success,response){
+						alert(11);
+					}
+				});
+			}
 		},{
 			text:"删除",
 			iconCls:"btn-del",
@@ -189,12 +199,11 @@ userPanel = new Ext.grid.Panel({
 		stripeRows:true
 	},
 	store:store,
-	mode:"local",
 	selModel:selModel,
 	columns:[
 		{header:"ID",flex:1,dataIndex:"id",sortable:true},
 		{header:"姓名",flex:1,dataIndex:"username",sortable:true},
 		{header:"年龄",flex:1,dataIndex:"age",sortable:true},
-		{header:"角色",flex:1,dataIndex:"role",sortable:true}
+		{header:"角色",flex:1,dataIndex:"userrole",sortable:true}
 	]
 });

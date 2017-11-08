@@ -1,23 +1,22 @@
 {
-	"total": 3,
-	"rows":[
+	"users":[
 		{
-			"id":"101",
-			"name":"张三",
+			"id":"1",
+			"username":"张三",
 			"age":"23",
-			"role":"管理员"
+			"userrole":"管理员"
 		},
 		{
-			"id":"102",
-			"name":"李四",
+			"id":"2",
+			"username":"李四",
 			"age":"24",
-			"role":"超级管理员"
+			"userrole":"超级管理员"
 		},
 		{
-			"id":"103",
-			"name":"王五",
+			"id":"3",
+			"username":"王五",
 			"age":"25",
-			"role":"员工"
+			"userrole":"员工"
 		}
 	]
 }

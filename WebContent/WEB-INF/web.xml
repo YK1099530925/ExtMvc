@@ -35,15 +35,19 @@
   
   	<!-- 字符编码过滤器，一定要放在所有过滤器之前 -->
   	<filter>
-  		<filter-name>CharacterEncodingFilter</filter-name>
+  		<filter-name>characterEncodingFilter</filter-name>
   		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
   		<init-param>
   			<param-name>encoding</param-name>
-  			<param-value>utf-8</param-value>
+  			<param-value>UTF-8</param-value>
   		</init-param>
+  		<init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
   	</filter>
   	<filter-mapping>
-  		<filter-name>CharacterEncodingFilter</filter-name>
+  		<filter-name>characterEncodingFilter</filter-name>
   		<url-pattern>/*</url-pattern>
   	</filter-mapping>
   	

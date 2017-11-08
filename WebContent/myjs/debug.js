@@ -69,10 +69,10 @@ Ext.onReady(function(){
 			msgTarget:"qtip"//显示一个浮动的提示信息
 		},
 		items:[{
-			id:"username",
+			id:"loginname",
 			fieldLabel:"用户名",
-			name:"username",
-			value:"yang",
+			name:"loginname",
+			value:"yk",
 			selectOnFocus:true//得到焦点时自动选的文本
 		},
 		{
@@ -80,13 +80,14 @@ Ext.onReady(function(){
 			fieldLabel:"密码",
 			inputType:"password",
 			name:"password",
-			value:"123456",
+			value:"123",
 			minLength:3,
 			minLengthText:"密码长度不能小于{0}"
 		}],
 		buttons:[{
 			text:"登录",
 			handler:function(){
+				//window.location.href="views/loginSuccess.jsp";
 				
 				/*//获取字段的方式
 				var formFields = loginform.getForm().getValues();
@@ -102,16 +103,18 @@ Ext.onReady(function(){
 					}
 				});*/
 
+				/*如果以get的方式提交，姓名中不能包含有中文，否则会出现乱码
+				 * 如果以post的方式提交没有任何问题*/
 				loginform.getForm().submit({
 					url:"loginform",
-					method:"post",
-					
-					success:function(form,actoin){
-						Ext.Msg.alert("提示","登录成功");
+					method:"get",
+					waitMsg:"正在登录，请稍等...",
+					success:function(form,action){
+						Ext.Msg.alert("提示",action.result.msg);
 						window.location.href="views/loginSuccess.jsp";
 					},
-					failure:function(form,actoin){
-						Ext.Msg.alert("提示","登录失败");
+					failure:function(form,action){
+						Ext.Msg.alert("提示",action.result.msg);
 					}
 				});
 				

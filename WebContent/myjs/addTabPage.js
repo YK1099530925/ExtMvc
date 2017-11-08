@@ -48,6 +48,7 @@
 			isNewTab = false;
 		}
 		if(isNewTab){
+			//创建一个标签页
 			var tabPage = centerPanel.add({
 				id:nodeId,//如果是新的tab标签页，则给他的id设置为节点的id
 				title:node.raw.text,

@@ -2,6 +2,7 @@ package extmvc.entities;
 
 /* 角色与用户之间的关系：角色-用户：一对多
  * username：用户姓名
+ * loginname:用户登录名
  * password：用户的密码
  *    age  ：用户的年龄
  * userrole：用户的角色属性
@@ -10,6 +11,7 @@ package extmvc.entities;
 public class User {
 	private int id;
 	private String username;
+	private String loginname;
 	private String password;
 	private int age;
 	private Role userrole;
@@ -25,6 +27,12 @@ public class User {
 	}
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	public String getLoginname() {
+		return loginname;
+	}
+	public void setLoginname(String loginname) {
+		this.loginname = loginname;
 	}
 	public String getPassword() {
 		return password;
