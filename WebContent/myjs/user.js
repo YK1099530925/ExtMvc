@@ -53,8 +53,7 @@ var store = new Ext.data.JsonStore({
 	],
     proxy:{
     	type: 'ajax',
-    	//method:"get",
-    	url:"../data/user.json",
+    	url:"../userDataSelect",
         reader: {//reader解析器，解析json，array等数据
             type: 'json',
             root: 'users'
@@ -178,14 +177,7 @@ userPanel = new Ext.grid.Panel({
 			text:"编辑",
 			iconCls:"btn-edit",
 			handler:function(){
-				Ext.Ajax.request({
-					method:"get",
-					url:"userDataSelect",//url不能进入springmvc
-					params:{},
-					callback:function(options,success,response){
-						alert(11);
-					}
-				});
+				
 			}
 		},{
 			text:"删除",

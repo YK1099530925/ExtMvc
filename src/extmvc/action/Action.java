@@ -1,5 +1,6 @@
 package extmvc.action;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,11 +57,13 @@ public class Action {
 		return msg;
 	}
 	
-	@RequestMapping(value="/userDataSelect",method=RequestMethod.GET)
-	public String  userDataSelect(){
-		System.out.println("userDataSelect");
+	@RequestMapping(value="/userDataSelect")
+	@ResponseBody
+	public Object userDataSelect(){
+		Map<String, Object> map = new HashMap<>();
 		//List<User> users = baseService.selectAllUser();
-		String msg = "chenggong";
-		return msg;
+		//map.put("users", users);
+		map.put("success", true);
+		return map;
 	}
 }
