@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="../jquery/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="../extjs/ext-all-debug.js"></script>
 <link rel="stylesheet" type="text/css" href="../resources/css/ext-all.css">
 <link rel="stylesheet" type="text/css" href="../css/main.css">

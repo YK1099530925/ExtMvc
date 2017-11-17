@@ -20,7 +20,8 @@
         <property name="age" type="int">
             <column name="AGE" />
         </property>
-        <many-to-one name="userrole" class="extmvc.entities.Role">
+        <many-to-one name="userrole" class="extmvc.entities.Role" 
+        	cascade="save-update" lazy="false">
             <column name="USERROLE" />
         </many-to-one>
     </class>

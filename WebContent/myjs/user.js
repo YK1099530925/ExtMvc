@@ -46,17 +46,19 @@ var userDatas = {
 var store = new Ext.data.JsonStore({
 	autoLoad:true,
 	fields:[
-		{name:"id"},
-		{name:"username"},
-		{name:"age"},
-		{name:"userrole"}
+		{name:"id",type:"int"},
+		{name:"username",type:"string"},
+		{name:"age",type:"int"},
+		{name:"userrole",type:"string"}
 	],
     proxy:{
     	type: 'ajax',
+    	//url:"../userDataSelect",
     	url:"../userDataSelect",
+    	
         reader: {//reader解析器，解析json，array等数据
             type: 'json',
-            root: 'users'
+            root: 'roots'
         }
     }
 });
@@ -177,12 +179,34 @@ userPanel = new Ext.grid.Panel({
 			text:"编辑",
 			iconCls:"btn-edit",
 			handler:function(){
-				
+				Ext.Ajax.request({
+					url:"../userDataSelect",
+					params:{},
+					customer:"自定义属性",
+					callback:function(options,success,response){
+						var msg = ["请求是否发送成功",success,"\n",
+							"服务器返回值",response.responseText,"\n",
+							"本地自定义属性",options.customer];
+							alert(msg);
+							
+					}
+				});
 			}
 		},{
 			text:"删除",
 			iconCls:"btn-del",
-			handler:function(){}
+			handler:function(){
+				Ext.Ajax.request({
+					url:"../getName",
+					params:{"id":2},
+					callback:function(options,success,response){
+						alert(success);
+						alert(response.responseText);
+						alert(response.result.username);
+					},
+					type:"json"
+				});
+			}
 		}
 		
 	],

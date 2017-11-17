@@ -1,5 +1,7 @@
 package extmvc.entities;
 
+import java.io.Serializable;
+
 /* 角色与用户之间的关系：角色-用户：一对多
  * username：用户姓名
  * loginname:用户登录名
@@ -8,7 +10,7 @@ package extmvc.entities;
  * userrole：用户的角色属性
  * */
 
-public class User {
+public class User implements Serializable{
 	private int id;
 	private String username;
 	private String loginname;
@@ -53,5 +55,9 @@ public class User {
 		this.userrole = userrole;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", loginname=" + loginname + ", password=" + password
+				+ ", age=" + age + ", userrole=" + userrole + "]";
+	}
 }

@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
 import extmvc.entities.User;
 import extmvc.service.BaseService;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**将请求域中的user同时放入session中，
  * SessionAttributes的value是一个
@@ -57,13 +61,41 @@ public class Action {
 		return msg;
 	}
 	
-	@RequestMapping(value="/userDataSelect")
+	@RequestMapping(value="/userDataSelect",produces="application/json;charset=utf-8")
 	@ResponseBody
-	public Object userDataSelect(){
+	public String userDataSelect(){
+		
+		List<User> users = baseService.selectAllUser();
+		System.out.println(users);
+		
+		/*如果使用延迟加载，在转换成json数据格式的时候，外键的值，存放不进来，
+		 * 将会报错（no session），只有将外键去掉，才能转换格式，但是如果不适用延迟加载(在
+		 * many-to-one中设置lazy="false")，则不会出现问题，但是使用lazy="false"的
+		 * 消耗太大了
+		 * */
+		/*JsonConfig jsonConfig = new JsonConfig();
+		jsonConfig.setJsonPropertyFilter(new PropertyFilter() {
+			@Override
+			public boolean apply(Object sorce, String name, Object value) {
+				if (name.equals("userrole")) {
+					return true;
+				}
+				return false;
+			}
+		});
+		
+		JSONArray jsonArray = JSONArray.fromObject(users, jsonConfig);*/
+		
+		/*JSONArray jsonArray = JSONArray.fromObject(users);		
+		String json = jsonArray.toString();
+		System.out.println("jsonArray-list是" + json);*/
+		
 		Map<String, Object> map = new HashMap<>();
-		//List<User> users = baseService.selectAllUser();
-		//map.put("users", users);
-		map.put("success", true);
-		return map;
+		map.put("roots",users);
+		//System.out.println("map" + map);
+		JSONObject jsonObject = JSONObject.fromObject(map);
+		String json2 = jsonObject.toString();
+		//System.out.println("jsonObject-map是" + json2);
+		return json2;
 	}
 }

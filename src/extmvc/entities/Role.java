@@ -1,11 +1,13 @@
 package extmvc.entities;
 
+import java.io.Serializable;
+
 /* 角色与用户之间的关系：角色-用户：一对多
  *   role  ：管理员、超级管理员、普通员工
  * describe：每一个角色的描写
  * */
 
-public class Role {
+public class Role implements Serializable{
 	private int id;
 	private String role;
 	private String describ;
@@ -27,5 +29,10 @@ public class Role {
 	}
 	public void setDescrib(String describ) {
 		this.describ = describ;
+	}
+	
+	@Override
+	public String toString() {
+		return "Role [id=" + id + ", role=" + role + ", describ=" + describ + "]";
 	}
 }

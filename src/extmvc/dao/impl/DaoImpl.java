@@ -16,7 +16,7 @@ public class DaoImpl implements BaseDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 	public Session getSession(){
-		return sessionFactory.getCurrentSession();
+		return sessionFactory.openSession();
 	}
 	
 	@Override
