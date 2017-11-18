@@ -2,6 +2,7 @@ package extmvc.dao;
 
 import java.util.List;
 
+import extmvc.entities.Role;
 import extmvc.entities.User;
 
 public interface BaseDao {
@@ -15,5 +16,4 @@ public interface BaseDao {
 	 * 查询所有数据
 	 * */
 	public List<User> selectAllUser();
-	
 }

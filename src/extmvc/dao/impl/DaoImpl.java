@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import extmvc.dao.BaseDao;
+import extmvc.entities.Role;
 import extmvc.entities.User;
 
 @Repository

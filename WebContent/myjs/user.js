@@ -49,7 +49,7 @@ var store = new Ext.data.JsonStore({
 		{name:"id",type:"int"},
 		{name:"username",type:"string"},
 		{name:"age",type:"int"},
-		{name:"userrole",type:"string"}
+		{name:"userrole"}
 	],
     proxy:{
     	type: 'ajax',
@@ -217,9 +217,19 @@ userPanel = new Ext.grid.Panel({
 	store:store,
 	selModel:selModel,
 	columns:[
-		{header:"ID",flex:1,dataIndex:"id",sortable:true},
-		{header:"姓名",flex:1,dataIndex:"username",sortable:true},
-		{header:"年龄",flex:1,dataIndex:"age",sortable:true},
-		{header:"角色",flex:1,dataIndex:"userrole",sortable:true}
+		{
+			header:"ID",flex:1,dataIndex:"id",sortable:true
+		},{
+			header:"姓名",flex:1,dataIndex:"username",sortable:true
+		},{
+			header:"年龄",flex:1,dataIndex:"age",sortable:true
+		},{
+			header:"角色",flex:1,dataIndex:"userrole",sortable:true,
+			renderer:function(val){//如何渲染
+				if(val != null){
+					return "管理员";
+				}
+			}
+		}
 	]
 });
