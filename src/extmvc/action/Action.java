@@ -65,19 +65,31 @@ public class Action {
 	@ResponseBody
 	public String userDataSelect(){
 		
-		List<User> users = baseService.selectAllUser();
-		System.out.println("users:" + users);
+		List<Object[]> users = baseService.selectAllUser();
+		JSONArray jsonArray = new JSONArray();
+		Map<String, Object> map = new HashMap<>();
+		for(Object obj[] : users){
+			map.put("id", obj[0]);
+			map.put("username", obj[1]);
+			map.put("age", obj[2]);
+			map.put("userrole", obj[3]);
+			jsonArray.add(map);
+		}
+		JSONObject json2 = new JSONObject();
+		json2.put("roots", jsonArray);
+		System.out.println("json2" + json2);
+		
 		/**如果使用延迟加载，在转换成json数据格式的时候，外键的值，存放不进来，
 		 * 将会报错（no session），只有将外键去掉，才能转换格式，但是如果不适用延迟加载(在
 		 * many-to-one中设置lazy="false")，则不会出现问题，但是使用lazy="false"的
 		 * 消耗太大了
 		 * */
 		//1:去掉外键的方式
-		JsonConfig jsonConfig = new JsonConfig();
+		/*JsonConfig jsonConfig = new JsonConfig();
 		jsonConfig.setJsonPropertyFilter(new PropertyFilter() {
 			@Override
 			public boolean apply(Object sorce, String name, Object value) {
-				if (name.equals("userrole")) {
+				if (name.equals("loginname") || name.equals("password") || name.equals("describ") || name.equals("id")) {
 					return true;
 				}
 				return false;
@@ -87,10 +99,11 @@ public class Action {
 		System.out.println("jsonArray" + jsonArray);
 		JSONObject json2 = new JSONObject();
 		json2.put("roots", jsonArray);
-		System.out.println("json:" + json2.toString());
+		System.out.println("json:" + json2.toString());*/
 		
 		//2:
 		/*JSONArray jsonArray = JSONArray.fromObject(users);
+		System.out.println("jsonArray" + jsonArray);
 		JSONObject json2 = new JSONObject();
 		json2.put("roots", jsonArray);
 		System.out.println(json2.toString());*/

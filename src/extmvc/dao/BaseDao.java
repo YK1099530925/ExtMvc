@@ -15,5 +15,5 @@ public interface BaseDao {
 	/**
 	 * 查询所有数据
 	 * */
-	public List<User> selectAllUser();
+	public List<Object[]> selectAllUser();
 }

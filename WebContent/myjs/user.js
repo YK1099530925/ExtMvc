@@ -70,16 +70,24 @@ var selModel = new Ext.selection.CheckboxModel({
 });
 
 var submit = function(){
+	//1:获取填写的数据
 	var formFields = addPanel.getForm().getValues();
 	var id = store.data.length + 1;
 	var username = formFields.username;
 	var age = formFields.age;
-	var role = formFields.userrole;
+	var userrole = formFields.userrole;
+	//2:发送请求添加数据
+/*	Ext.Ajax.request({
+		url:"../addUser",
+		method:"post",
+		
+	});*/
+	//3:成功则本地添加数据
 	var rec = Ext.data.Model({
 		id:id,
 		username:username,
 		age:age,
-		role:role
+		userrole:userrole
 	});
 	
 	store.add(rec);
@@ -224,12 +232,7 @@ userPanel = new Ext.grid.Panel({
 		},{
 			header:"年龄",flex:1,dataIndex:"age",sortable:true
 		},{
-			header:"角色",flex:1,dataIndex:"userrole",sortable:true,
-			renderer:function(val){//如何渲染
-				if(val != null){
-					return "管理员";
-				}
-			}
+			header:"角色",flex:1,dataIndex:"userrole",sortable:true
 		}
 	]
 });

@@ -21,7 +21,7 @@ public class ServiceImpl implements BaseService {
 	}
 
 	@Override
-	public List<User> selectAllUser() {
+	public List<Object[]> selectAllUser() {
 		return baseDao.selectAllUser();
 	}
 

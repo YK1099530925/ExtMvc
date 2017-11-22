@@ -30,9 +30,9 @@ public class DaoImpl implements BaseDao {
 	}
 
 	@Override
-	public List<User> selectAllUser() {
-		List<User> users = null;
-		String hql = "from User";
+	public List<Object[]> selectAllUser() {
+		List<Object[]> users = null;
+		String hql = "select u.id as id,u.username,u.age,r.role from User u, Role r where u.userrole = r.id";
 		users = getSession().createQuery(hql).list();
 		return users;
 	}
