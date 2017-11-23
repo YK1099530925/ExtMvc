@@ -8,11 +8,11 @@
 	//判断是哪个页面，显示其内容
 	whatPage = function(nodeId){
 		if(nodeId == "userInfo"){
-			return userPanel;
+			return userPanel();
 		}else if(nodeId == "deparInfo"){
-			return "";
+			return null;
 		}else{
-			return "";
+			return null;
 		}
 	};
 	
@@ -24,7 +24,6 @@
 		
 		//得到节点的id
 		var nodeId = node.get("id");
-		
 		/* 判断一个tab页是否存在
 		 * 方法1：判断node的id是否存在，如果存在就设置此id的tab为激活状态
 		 * 如下面实现的方式：通过传过来节点的id，我们先添加一个tab页面，并且设置页面的id为此节点的id，
@@ -43,8 +42,10 @@
 		 * 是获取不到的
 		 * alert(Ext.getCmp("userInfo"));
 		 */
-		if(Ext.getCmp(nodeId)){
-			centerPanel.setActiveTab(nodeId);//如果此tab页存在，设置此tab页为活动页面
+		var tab = Ext.getCmp(nodeId);
+		if(tab){
+			tab.show();
+			//centerPanel.setActiveTab(nodeId);//如果此tab页存在，设置此tab页为活动页面
 			isNewTab = false;
 		}
 		if(isNewTab){
@@ -53,10 +54,13 @@
 				id:nodeId,//如果是新的tab标签页，则给他的id设置为节点的id
 				title:node.raw.text,
 				closable:true,//是否可以关闭
-				items:whatPage(nodeId)
+				items:whatPage(nodeId),
+				closeAction:"destory",
+				autoDestory:true 
+				
 				//加载页面中的内容使用autoLoad
 				//autoLoad:""//当在这儿填../myjs/user.js显示的是user.js中的代码，即autoLoad加载的是页面的数据
-			})
+			});
 			centerPanel.setActiveTab(tabPage);
 		}
 	

@@ -59,8 +59,7 @@ Ext.onReady(function(){
 				children:[{
 					id:"userInfo",
 					text:"用户信息",
-					leaf:true,
-					url:"userInfo"
+					leaf:true
 				}]
 			},{
 				id:"deparManage",
@@ -70,8 +69,7 @@ Ext.onReady(function(){
 				children:[{
 					id:"deparInfo",
 					text:"部门信息",
-					leaf:true,
-					url:"deparInf"
+					leaf:true
 				}]
 			},{
 				id:"roleManage",
@@ -81,8 +79,7 @@ Ext.onReady(function(){
 				children:[{
 					id:"roleInfo",
 					text:"角色信息",
-					leaf:true,
-					url:"roleInf"
+					leaf:true
 				}]
 			}]
 		}

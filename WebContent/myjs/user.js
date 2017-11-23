@@ -43,7 +43,7 @@ var userDatas = {
  * 		url:"...."
  * });
  * */
-var store = new Ext.data.JsonStore({
+store = new Ext.data.JsonStore({
 	autoLoad:true,
 	fields:[
 		{name:"id",type:"int"},
@@ -64,15 +64,19 @@ var store = new Ext.data.JsonStore({
 });
 
 //设置复选框
-var selModel = new Ext.selection.CheckboxModel({
+selModel = new Ext.selection.CheckboxModel({
 	injectCheckbox:0,
 	checkOnly:true
 });
 
-var submit = function(){
+submit = function(){
 	//1:获取填写的数据
 	var formFields = addPanel.getForm().getValues();
-	var id = store.data.length + 1;
+	//此id需要获取Store中最后一项的id
+	//得到最后gridPanel最后一行的行号，其实就是Store数据的长度 - 1
+	var lastStore = store.data.length - 1;
+	//通过最后一行拿到其中的id
+	var id = store.data.items[lastStore].data.id + 1;
 	var username = formFields.username;
 	var age = formFields.age;
 	var userrole = formFields.userrole;
@@ -91,11 +95,11 @@ var submit = function(){
 	});
 	
 	store.add(rec);
-	addWindow.hide();
+	addPanel.getForm().reset();
+	addWindow.close();
 };
-
 //创建表单
-var addPanel = new Ext.form.Panel({
+addPanel = new Ext.form.Panel({
 	buttonAlign:"center",
 	layout:"anchor",
 	frame:true,
@@ -161,7 +165,7 @@ var addPanel = new Ext.form.Panel({
 });
 
 //创建窗口
-var addWindow = new Ext.Window({
+addWindow = new Ext.Window({
 	title:"新增用户",
 	width:400,
 	height:300,
@@ -172,7 +176,77 @@ var addWindow = new Ext.Window({
 	items:addPanel
 });
 
-userPanel = new Ext.grid.Panel({
+userPanel = function(){
+	userpanel = new Ext.grid.Panel({
+		width:window.innerWidth - 200,
+		height:300,
+		frame:true,
+		tbar:[
+			{
+				text:"新增",
+				iconCls:"btn-add",
+				handler:function(){
+					addWindow.show();
+				}
+			},{
+				text:"编辑",
+				iconCls:"btn-edit",
+				handler:function(){
+					Ext.Ajax.request({
+						url:"../userDataSelect",
+						params:{},
+						customer:"自定义属性",
+						callback:function(options,success,response){
+							var msg = ["请求是否发送成功",success,"\n",
+								"服务器返回值",response.responseText,"\n",
+								"本地自定义属性",options.customer];
+								alert(msg);
+								
+						}
+					});
+				}
+			},{
+				text:"删除",
+				iconCls:"btn-del",
+				handler:function(){
+					Ext.Ajax.request({
+						url:"../getName",
+						params:{"id":2},
+						callback:function(options,success,response){
+							alert(success);
+							alert(response.responseText);
+							alert(response.result.username);
+						},
+						type:"json"
+					});
+				}
+			}
+			
+		],
+		viewConfig:{
+			forceFit:true,
+			stripeRows:true
+		},
+		store:store,
+		selModel:selModel,
+		columns:[
+			{
+				header:"ID",flex:1,dataIndex:"id",sortable:true
+			},{
+				header:"姓名",flex:1,dataIndex:"username",sortable:true
+			},{
+				header:"年龄",flex:1,dataIndex:"age",sortable:true
+			},{
+				header:"角色",flex:1,dataIndex:"userrole",sortable:true
+			}
+		]
+	});
+	return userpanel;
+};
+
+//这种方式：使用对象引用的方法，当关闭tab页面再次打开的时候，将会报userPanel未定义的错
+//因此将选用上面方式，利用函数的方法
+/*userPanel = new Ext.grid.Panel({
 	width:window.innerWidth - 200,
 	height:300,
 	frame:true,
@@ -235,4 +309,4 @@ userPanel = new Ext.grid.Panel({
 			header:"角色",flex:1,dataIndex:"userrole",sortable:true
 		}
 	]
-});
+});*/
