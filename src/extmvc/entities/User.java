@@ -11,17 +11,17 @@ import java.io.Serializable;
  * */
 
 public class User implements Serializable{
-	private int id;
+	private Integer id;
 	private String username;
 	private String loginname;
 	private String password;
 	private int age;
 	private Role userrole;
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getUsername() {

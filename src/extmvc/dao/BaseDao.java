@@ -16,4 +16,11 @@ public interface BaseDao {
 	 * 查询所有数据
 	 * */
 	public List<Object[]> selectAllUser();
+	/**
+	 * 通过id查询是否存在此人
+	 * */
+	public User getUserById(Integer id);
+	
+	public Role getRole(Integer userrole);
+	public void saveOrUpdate(User user);
 }

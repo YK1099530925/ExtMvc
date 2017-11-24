@@ -69,37 +69,51 @@ selModel = new Ext.selection.CheckboxModel({
 	checkOnly:true
 });
 
-submit = function(){
+sub = function(){
 	//1:获取填写的数据
-	var formFields = addPanel.getForm().getValues();
-	//此id需要获取Store中最后一项的id
-	//得到最后gridPanel最后一行的行号，其实就是Store数据的长度 - 1
-	var lastStore = store.data.length - 1;
-	//通过最后一行拿到其中的id
-	var id = store.data.items[lastStore].data.id + 1;
-	var username = formFields.username;
-	var age = formFields.age;
-	var userrole = formFields.userrole;
+	var user = addPanel.getForm().getValues();
+	//var lastStore = store.data.length - 1;
+	//var id = store.data.items[lastStore].data.id + 1;
+	//var username = user.username;
+	//var age = user.age;
+	//var userrole = user.userrole;
+	//var userrole1 = Ext.getCmp('role').getRawValue();
 	//2:发送请求添加数据
-/*	Ext.Ajax.request({
+
+/*	addPanel.getForm().submit({
 		url:"../addUser",
 		method:"post",
-		
+		success:function(form,data){
+			alert("添加成功:");
+		}
 	});*/
+	
+	Ext.Ajax.request({
+		url:"../addUser",
+		method:"post",
+		params:user,
+		success:function(data){
+			alert("添加成功:");
+		},
+		type:"json"
+		
+	});
 	//3:成功则本地添加数据
-	var rec = Ext.data.Model({
+	/*var rec = Ext.data.Model({
 		id:id,
 		username:username,
 		age:age,
-		userrole:userrole
+		userrole:userrole1
 	});
 	
-	store.add(rec);
+	store.add(rec);*/
 	addPanel.getForm().reset();
 	addWindow.close();
+	store.reload();
 };
 //创建表单
 addPanel = new Ext.form.Panel({
+	id:"addPanel",
 	buttonAlign:"center",
 	layout:"anchor",
 	frame:true,
@@ -133,19 +147,21 @@ addPanel = new Ext.form.Panel({
 			 * 设置pageSize，然后还需要返回数据的总条数，
 			 * 这样JsonStore才能计算分页*/
 			xtype:"combo",
-			id:"userrole",
+			id:"role",
 			name:"userrole",
 			fieldLabel:"角色",
 			store:new Ext.data.ArrayStore({
 				autoLoad:true,
 				fields:["fid","frole"],
 				data:[
-					["0","超级管理员"],
-					["1","管理员"],
-					["2","员工"]
+					["1","超级管理员"],
+					["2","管理员"],
+					["3","员工"]
 				]
 			}),
+			value:"1",
 			displayField:"frole",//使用哪个字段作为标签菜单
+			valueField:"fid",
 			mode:"local",//数据源来自本地
 			typeAhead:false,//是否会自动填充
 			forceSelection:true//是否强制用户只能通过选择的方式交互
@@ -154,7 +170,7 @@ addPanel = new Ext.form.Panel({
 	buttons:[
 		{
 			text:"确定",
-			handler:submit
+			handler:sub
 		},{
 			text:"重置",
 			handler:function(){

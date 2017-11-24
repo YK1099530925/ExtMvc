@@ -6,12 +6,14 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import extmvc.entities.Role;
 import extmvc.entities.User;
 import extmvc.service.BaseService;
 import net.sf.json.JSONArray;
@@ -79,6 +81,8 @@ public class Action {
 		json2.put("roots", jsonArray);
 		System.out.println("json2" + json2);
 		
+		return json2.toString();
+		
 		/**如果使用延迟加载，在转换成json数据格式的时候，外键的值，存放不进来，
 		 * 将会报错（no session），只有将外键去掉，才能转换格式，但是如果不适用延迟加载(在
 		 * many-to-one中设置lazy="false")，则不会出现问题，但是使用lazy="false"的
@@ -115,7 +119,51 @@ public class Action {
 		String json2 = jsonObject.toString();
 		System.out.println("json:" + json2);
 		*/
-		
-		return json2.toString();
+	}
+	
+/*	@ModelAttribute
+	public void userModel(Integer id,String username,Integer age,Integer userrole,
+			Map<String, Object> map){
+		//判断id是否存在，如果存在则表示修改，如果不存在则表示添加
+		if(baseService.getUserById(id) == null){
+			User user = null;
+			user.setId(id);
+			user.setUsername(username);
+			user.setAge(age);
+			//拿到userrole对应的role
+			Role role = baseService.getRole(userrole);
+			user.setUserrole(role);
+			//因为没有密码，因此自动设置
+			user.setLoginname("tt");
+			user.setPassword("123");
+		}else {
+			System.out.println("存在此人");
+		}
+		System.out.println("添加数据前的操作");
+	}*/
+	
+	@RequestMapping(value="/addUser",method=RequestMethod.POST)
+	@ResponseBody
+	public String addUser(Integer id,String username,Integer age,Integer userrole){
+		String mString = "";
+		if(baseService.getUserById(id) == null){
+			User user = new User();
+			//user.setId(id);
+			user.setUsername(username);
+			user.setAge(age);
+			//拿到userrole对应的role
+			Role role = baseService.getRole(userrole);
+			user.setUserrole(role);
+			//因为没有密码，因此自动设置
+			user.setLoginname("tt");
+			user.setPassword("123");
+			System.out.println(user);
+			baseService.saveOrUpdate(user);
+			mString = "{'success':'true'}";
+		}else {
+			System.out.println("存在此人");
+			mString = "{'success':'false'}";
+		}
+		return mString;
 	}
 }

@@ -17,7 +17,7 @@ public class DaoImpl implements BaseDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 	public Session getSession(){
-		return sessionFactory.openSession();
+		return sessionFactory.getCurrentSession();
 	}
 	
 	@Override
@@ -35,6 +35,23 @@ public class DaoImpl implements BaseDao {
 		String hql = "select u.id as id,u.username,u.age,r.role from User u, Role r where u.userrole = r.id";
 		users = getSession().createQuery(hql).list();
 		return users;
+	}
+
+	@Override
+	public User getUserById(Integer id) {
+		String hql = "from User where id=" + id;
+		return (User)getSession().createQuery(hql).uniqueResult();
+	}
+
+	@Override
+	public Role getRole(Integer userrole) {
+		String hql = "from Role where id=" + userrole;
+		return (Role)getSession().createQuery(hql).uniqueResult();
+	}
+
+	@Override
+	public void saveOrUpdate(User user) {
+		getSession().saveOrUpdate(user);
 	}
 
 }
