@@ -11,8 +11,8 @@
 			return userPanel();
 		}else if(nodeId == "deparInfo"){
 			return null;
-		}else{
-			return null;
+		}else if(nodeId == "roleInfo"){
+			return rolePanel();
 		}
 	};
 	

@@ -1,6 +1,15 @@
 
 .main-logo {float:left;display:block;margin:5px 3px;height:30px;}
+.main-btn {float:right;margin:9px 5px 0 5px;}
+
 
 .btn-add {background-image:url("../imgs/icon-add.png");}
 .btn-edit {background-image:url("../imgs/icon-edit.png");}
 .btn-del {background-image:url("../imgs/icon-del.png");}
+
+
+.x-btn-lock {background-image:url("../imgs/icon-lock.png");}
+.x-btn-exit {
+	background-image: url("../imgs/icon-exit.png");
+}
+.x-btn-user{background-image: url("../imgs/icon-user.png");}

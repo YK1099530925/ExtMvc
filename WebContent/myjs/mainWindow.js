@@ -44,6 +44,26 @@ Ext.onReady(function(){
 					src:"../imgs/logo.png",//指定路径，一般为相对路劲
 					cls:"main-logo"
 				}
+			},{
+				xtype:"splitbutton",
+				minWidth:125,
+				iconCls:"x-btn-user",
+				cls:"main-btn",
+				enabelToggle: true,
+				pressed: true,
+				text: "Neo",
+				menu: new Ext.menu.Menu({
+					items: [{
+						text: "修改密码",
+						iconCls: "x-btn-lock"
+					}, {
+						text: "退出系统",
+						iconCls: "x-btn-exit",
+						handler: function() {
+							window.location.href = "../index.jsp";
+						}
+					}]
+				})
 			}]
 		});
 	

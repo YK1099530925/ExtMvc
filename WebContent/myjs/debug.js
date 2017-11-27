@@ -69,9 +69,9 @@ Ext.onReady(function(){
 			msgTarget:"qtip"//显示一个浮动的提示信息
 		},
 		items:[{
-			id:"loginname",
+			id:"username",
 			fieldLabel:"用户名",
-			name:"loginname",
+			name:"username",
 			value:"yk",
 			selectOnFocus:true//得到焦点时自动选的文本
 		},

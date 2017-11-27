@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,19 +14,18 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import extmvc.entities.Role;
 import extmvc.entities.User;
+import extmvc.entities.UserLogin;
 import extmvc.service.BaseService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
-import net.sf.json.util.PropertyFilter;
 
 /**将请求域中的user同时放入session中，
  * SessionAttributes的value是一个
  * 字符串数组，能够放多个键
  * */
-@SessionAttributes(value={"user"})
+@SessionAttributes(value={"userLogin"})
 @Controller
-public class Action {
+public class UserAction {
 	
 	@Autowired
 	private BaseService baseService;
@@ -43,19 +41,19 @@ public class Action {
 	@RequestMapping(value="/loginform",method=RequestMethod.GET,
 			produces="application/json;charset=utf-8")
 	@ResponseBody
-	public String login(@RequestParam("loginname") String loginname,
+	public String login(@RequestParam("username") String username,
 			@RequestParam("password") String password, Map<String, Object> map){
 		/*发送给前台的响应信息*/
 		String msg = "";
 		/*检查用户登录*/
-		User user = baseService.userLogin(loginname, password);
+		UserLogin userLogin = baseService.userLogin(username, password);
 		/*判断用户是否为空*/
-		if(user != null){
+		if(userLogin != null){
 			/* *
 			 * 将user放在请求域中，同时添加@SessionAttribute
 			 * 注解将user放入session中，用来保存登录信息
 			 * */
-			map.put("user", user);
+			map.put("userLogin", userLogin);
 			msg = "{success:true,msg:'登录成功...'}";
 		}else{
 			msg = "{success:false,msg:'登录失败，用户名或者密码错误'}";
@@ -66,7 +64,6 @@ public class Action {
 	@RequestMapping(value="/userDataSelect",produces="application/json;charset=utf-8")
 	@ResponseBody
 	public String userDataSelect(){
-		
 		List<Object[]> users = baseService.selectAllUser();
 		JSONArray jsonArray = new JSONArray();
 		Map<String, Object> map = new HashMap<>();
@@ -89,7 +86,7 @@ public class Action {
 		 * 消耗太大了
 		 * */
 		//1:去掉外键的方式
-		/*JsonConfig jsonConfig = new JsonConfig();
+		/**JsonConfig jsonConfig = new JsonConfig();
 		jsonConfig.setJsonPropertyFilter(new PropertyFilter() {
 			@Override
 			public boolean apply(Object sorce, String name, Object value) {
@@ -106,14 +103,14 @@ public class Action {
 		System.out.println("json:" + json2.toString());*/
 		
 		//2:
-		/*JSONArray jsonArray = JSONArray.fromObject(users);
+		/**JSONArray jsonArray = JSONArray.fromObject(users);
 		System.out.println("jsonArray" + jsonArray);
 		JSONObject json2 = new JSONObject();
 		json2.put("roots", jsonArray);
 		System.out.println(json2.toString());*/
 		
 		//3:
-		/*Map<String, Object> map = new HashMap<>();
+		/**Map<String, Object> map = new HashMap<>();
 		map.put("roots",users);
 		JSONObject jsonObject = JSONObject.fromObject(map);
 		String json2 = jsonObject.toString();
@@ -121,7 +118,7 @@ public class Action {
 		*/
 	}
 	
-/*	@ModelAttribute
+/**	@ModelAttribute
 	public void userModel(Integer id,String username,Integer age,Integer userrole,
 			Map<String, Object> map){
 		//判断id是否存在，如果存在则表示修改，如果不存在则表示添加
@@ -142,28 +139,40 @@ public class Action {
 		System.out.println("添加数据前的操作");
 	}*/
 	
-	@RequestMapping(value="/addUser",method=RequestMethod.POST)
+	@RequestMapping(value="/addOrUpdateUser",method=RequestMethod.POST,
+			produces="application/json;charset=utf-8")
 	@ResponseBody
-	public String addUser(Integer id,String username,Integer age,Integer userrole){
-		String mString = "";
-		if(baseService.getUserById(id) == null){
+	public String addOrUpdateUser(Integer id,String username,Integer age,Integer userrole){
+		String msg = "";
+		User model = baseService.getUserById(id);
+		//首先从库中找是否存在此人，不存在，则添加，存在则修改
+		if(model == null){
 			User user = new User();
-			//user.setId(id);
 			user.setUsername(username);
 			user.setAge(age);
-			//拿到userrole对应的role
 			Role role = baseService.getRole(userrole);
 			user.setUserrole(role);
-			//因为没有密码，因此自动设置
-			user.setLoginname("tt");
-			user.setPassword("123");
-			System.out.println(user);
 			baseService.saveOrUpdate(user);
-			mString = "{'success':'true'}";
+			msg = "{data:'添加成功'}";
 		}else {
-			System.out.println("存在此人");
-			mString = "{'success':'false'}";
+			System.out.println("存在此人,修改信息");
+			User user = model;
+			user.setUsername(username);
+			user.setAge(age);
+			Role role = baseService.getRole(userrole);
+			user.setUserrole(role);
+			baseService.saveOrUpdate(user);
+			msg = "{data:'修改成功'}";
 		}
-		return mString;
+		return msg;
+	}
+	
+	@RequestMapping(value="/deleteUser",method=RequestMethod.POST,
+			produces="application/json;charset=utf-8")
+	@ResponseBody
+	public String deleteUser(Integer id){
+		System.out.println("id:"+id);
+		baseService.deleteUser(id);
+		return "{'data':'删除成功'}";
 	}
 }

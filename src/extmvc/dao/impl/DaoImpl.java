@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import extmvc.dao.BaseDao;
 import extmvc.entities.Role;
 import extmvc.entities.User;
+import extmvc.entities.UserLogin;
 
 @Repository
 public class DaoImpl implements BaseDao {
@@ -21,18 +22,18 @@ public class DaoImpl implements BaseDao {
 	}
 	
 	@Override
-	public User userLogin(String loginname, String password) {
-		User user = null;
-		String hql = "from User where loginname = '"+ loginname 
-				+"' and password = '" + password +"'";
-		user = (User)getSession().createQuery(hql).uniqueResult();
-		return user;
+	public UserLogin userLogin(String username, String password) {
+		UserLogin userLogin = null;
+		String hql = "from UserLogin where username ='"+ username 
+				+"' and password ='" + password +"'";
+		userLogin = (UserLogin)getSession().createQuery(hql).uniqueResult();
+		return userLogin;
 	}
 
 	@Override
 	public List<Object[]> selectAllUser() {
 		List<Object[]> users = null;
-		String hql = "select u.id as id,u.username,u.age,r.role from User u, Role r where u.userrole = r.id";
+		String hql = "select u.id, u.username, u.age, r.role from User u, Role r where u.userrole = r.id";
 		users = getSession().createQuery(hql).list();
 		return users;
 	}
@@ -52,6 +53,18 @@ public class DaoImpl implements BaseDao {
 	@Override
 	public void saveOrUpdate(User user) {
 		getSession().saveOrUpdate(user);
+	}
+
+	@Override
+	public void deleteUser(Integer id) {
+		String hql = "delete from User where id=" + id;
+		getSession().createQuery(hql).executeUpdate();
+	}
+
+	@Override
+	public List<Role> roleDataSelect() {
+		String hql = "from Role";
+		return getSession().createQuery(hql).list();
 	}
 
 }

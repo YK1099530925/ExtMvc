@@ -4,6 +4,7 @@ import java.util.List;
 
 import extmvc.entities.Role;
 import extmvc.entities.User;
+import extmvc.entities.UserLogin;
 
 public interface BaseDao {
 	/**
@@ -11,7 +12,7 @@ public interface BaseDao {
 	 * 返回值：User
 	 * 参数：loginname,password
 	 * */
-	public User userLogin(String loginname,String password);
+	public UserLogin userLogin(String username,String password);
 	/**
 	 * 查询所有数据
 	 * */
@@ -22,5 +23,13 @@ public interface BaseDao {
 	public User getUserById(Integer id);
 	
 	public Role getRole(Integer userrole);
+	/**
+	 * 添加修改用户
+	 * */
 	public void saveOrUpdate(User user);
+	/**
+	 * 删除用户
+	 * */
+	public void deleteUser(Integer id);
+	public List<Role> roleDataSelect();
 }

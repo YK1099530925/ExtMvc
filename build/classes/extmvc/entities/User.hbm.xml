@@ -11,14 +11,11 @@
         <property name="username" type="java.lang.String">
             <column name="USERNAME" />
         </property>
-        <property name="loginname" type="java.lang.String">
-            <column name="LOGINNAME" />
+        <property name="age" type="int">
+            <column name="AGE" />
         </property>
         <property name="password" type="java.lang.String">
             <column name="PASSWORD" />
-        </property>
-        <property name="age" type="int">
-            <column name="AGE" />
         </property>
         <many-to-one name="userrole" class="extmvc.entities.Role" 
         			 cascade="save-update" lazy="false">
