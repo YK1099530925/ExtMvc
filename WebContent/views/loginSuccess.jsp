@@ -17,6 +17,17 @@
 <title>用户管理</title>
 </head>
 <body>
-	<div id="mainWindow"></div>
+	<!-- 用input来保存session中用户的信息，以便在Ext中获取值
+		  保存的信息只需要：id，username，password，userrole.role
+	 -->
+	 <input type="hidden" id="session_id" name="session_id" 
+		value="${sessionScope.userLogin.id }">
+	<input type="hidden" id="session_username" name="session_username" 
+		value="${sessionScope.userLogin.username }">
+	<input type="hidden" id="session_password" name="session_password" 
+		value="${sessionScope.userLogin.password }">
+	<input type="hidden" id="session_userrole" name="session_userrole" 
+		value="${sessionScope.userLogin.userrole.role }">
+	<!-- <div id="mainWindow"></div> -->
 </body>
 </html>

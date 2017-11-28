@@ -67,4 +67,17 @@ public class DaoImpl implements BaseDao {
 		return getSession().createQuery(hql).list();
 	}
 
+	@Override
+	public int chagePassword(Integer id, String userrole, String new_password) {
+		String table = "";
+		if(userrole.equals("超级管理员")){
+			table = "UserLogin";
+		}else {
+			table = "User";
+		}
+		String hql = "update " + table +" set password = '" + new_password 
+				+"' where id=" + id;
+		return getSession().createQuery(hql).executeUpdate();
+	}
+
 }

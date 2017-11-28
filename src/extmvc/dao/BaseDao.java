@@ -31,5 +31,8 @@ public interface BaseDao {
 	 * 删除用户
 	 * */
 	public void deleteUser(Integer id);
+	
 	public List<Role> roleDataSelect();
+	
+	public int chagePassword(Integer id, String userrole, String new_password);
 }

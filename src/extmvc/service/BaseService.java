@@ -38,4 +38,6 @@ public interface BaseService {
 	 * 查询所有角色
 	 * */
 	public List<Role> roleDataSelect();
+	
+	public int changePassword(Integer id, String userrole, String new_password);
 }

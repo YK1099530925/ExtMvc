@@ -52,4 +52,9 @@ public class ServiceImpl implements BaseService {
 		return baseDao.roleDataSelect();
 	}
 
+	@Override
+	public int changePassword(Integer id, String userrole, String new_password) {
+		return baseDao.chagePassword(id,userrole,new_password);
+	}
+
 }

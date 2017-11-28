@@ -31,7 +31,7 @@ rolePanel = function(){
 			{
 				text:"新增",
 				iconCls:"btn-add",
-				handler:function(){
+				handler:function(){				
 					
 				}
 			},{
