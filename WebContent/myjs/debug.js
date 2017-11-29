@@ -52,14 +52,16 @@ Ext.onReady(function(){
 	
 	var loginform = new Ext.form.Panel({
 		title:"用户登录",
-		height:150,
+		height:200,
 		width:300,
 		pageX:500,
 		pageY:200,
 		frame:true,//是否渲染表单，给表单填充颜色
 		renderTo:"form",
+		buttonAlign:"center",
 		defaultType:"textfield",//设置表单字段的默认类型
 		defaults:{//统一设置表单字段默认属性
+			margin:"10 0 10 50",
 			labelSeparator:":",
 			labelWidth:50,//标签宽度
 			width:200,//字段宽度
@@ -83,31 +85,32 @@ Ext.onReady(function(){
 			value:"123",
 			minLength:3,
 			minLengthText:"密码长度不能小于{0}"
+		},{
+			margin:"10 0 10 70",
+			id:"login",
+			xtype:"radiogroup",
+			columns:2,
+			//allowBlank:false,//false代表至少选择一项
+			//blankText:"至少选择一项",
+			items:[{
+				name:"login",
+				boxLabel:"超管",
+				inputValue:"UserLogin",
+				checked:true//默认选项
+			},{
+				name:"login",
+				boxLabel:"用户",
+				inputValue:"User"
+			}]
 		}],
 		buttons:[{
 			text:"登录",
 			handler:function(){
-				//window.location.href="views/loginSuccess.jsp";
-				
-				/*//获取字段的方式
-				var formFields = loginform.getForm().getValues();
-				alert(formFields["username"]);*///或者fromFields.username
-				
-				
-				/*//Ajax请求
-				    Ext.Ajax.request({
-					url:"loginform",
-					params:{username:"123",password:"1231312"},
-					callback:function(options,success,response){
-						alert(11);
-					}
-				});*/
-
 				/*如果以get的方式提交，姓名中不能包含有中文，否则会出现乱码
 				 * 如果以post的方式提交没有任何问题*/
 				loginform.getForm().submit({
 					url:"loginform",
-					method:"get",
+					method:"post",
 					waitMsg:"正在登录，请稍等...",
 					success:function(form,action){
 						Ext.Msg.alert("提示",action.result.msg);

@@ -68,24 +68,21 @@ selModel = new Ext.selection.CheckboxModel({
 });
 
 sub = function(){
-	//1:获取填写的数据
 	var user = add_edit_Panel.getForm().getValues();
-	//var lastStore = store.data.length - 1;
-	//var id = store.data.items[lastStore].data.id + 1;
-	//var username = user.username;
-	//var age = user.age;
-	//var userrole = user.userrole;
-	//var userrole1 = Ext.getCmp('userrole').getRawValue();
-	//2:发送请求添加数据
-
-/*	addPanel.getForm().submit({
-		url:"../addUser",
-		method:"post",
-		success:function(form,data){
-			alert("添加成功:");
+	/*var lastStore = store.data.length - 1;
+	  var id = store.data.items[lastStore].data.id + 1;
+	  var username = user.username;
+	  var age = user.age;
+	  var userrole = user.userrole;
+	  var userrole1 = Ext.getCmp('userrole').getRawValue();
+	  */
+	//id为空表示新增，判断新增
+	if(user.id == null){
+		if(window.session_userrole_id == 2 && user.userrole == 2){
+			Ext.Msg.alert("提示","您只能添加员工");
+			return;
 		}
-	});*/
-	
+	}
 	Ext.Ajax.request({
 		url:"../addOrUpdateUser",
 		method:"post",
@@ -100,14 +97,12 @@ sub = function(){
 		type:"json"
 		
 	});
-	//3:成功则本地添加数据
 	/*var rec = Ext.data.Model({
 		id:id,
 		username:username,
 		age:age,
 		userrole:userrole1
 	});
-	
 	store.add(rec);*/
 	add_edit_Panel.getForm().reset();
 	add_edit_Window.close();
@@ -140,12 +135,12 @@ items = [
 				autoLoad:true,
 				fields:["fid","frole"],
 				data:[
-					["1","超级管理员"],
+					//["1","超级管理员"],
 					["2","管理员"],
 					["3","员工"]
 				]
 			}),
-			value:"1",
+			value:"3",
 			displayField:"frole",//使用哪个字段作为标签菜单
 			valueField:"fid",
 			mode:"local",//数据源来自本地
@@ -197,11 +192,11 @@ add_edit_Window = new Ext.Window({
 
 whatRole = function(userrole){
 	if (userrole == "超级管理员") {
-		return "1";
+		return 1;
 	} else if (userrole == "管理员") {
-		return "2";
+		return 2;
 	} else {
-		return "3";
+		return 3;
 	}
 }
 
@@ -215,6 +210,15 @@ userPanel = function(){
 				text:"新增",
 				iconCls:"btn-add",
 				handler:function(){
+					/**判断用户等级
+					 * 1：超级管理员：可新增2.3
+					 * 2：管理员：可新增3
+					 * 3：员工：无法新增
+					 * */
+					if(window.session_userrole_id == 3){
+						Ext.Msg.alert("提示","您无法新增");
+						return;
+					}
 					add_edit_Window.setTitle("新增用户");
 					add_edit_Window.show();
 				}
@@ -222,20 +226,35 @@ userPanel = function(){
 				text:"编辑",
 				iconCls:"btn-edit",
 				handler:function(){
-					add_edit_Window.setTitle("编辑用户");
+					/**判断用户等级
+					 * 1：超级管理员：可编辑2.3
+					 * 2：管理员：可编辑2.3
+					 * 3：员工：可编辑3
+					 * */
 					if(userpanel.getSelectionModel().hasSelection()){
 						//获取单行数据：如下，获取一行或多行getSelectionModel().getSelections();
 						var rec = userpanel.getSelectionModel().selected.items[0].data;
 						//拿到用户角色，因为拿到的是文本（如：管理员），则需要将它对应的value值给userrole
-						var userrole = rec.userrole;
+						var userrole = whatRole(rec.userrole);//返回userrole对应的数值
 						//新增与修改是一个界面，因此只需要给新增界面赋值，则就成为修改界面
 						var values = {
 										id:rec.id,
 										username:rec.username,
 										age:rec.age,
-										userrole:whatRole(userrole)//返回userrole对应的数值
-										};
-						
+										userrole:userrole
+									};
+						//判断是否是员工，员工只能修改自己，即session_id要是自己的id:rec.id
+						if(window.session_userrole_id == 3 && 
+							window.session_id != rec.id){
+							Ext.Msg.alert("提示","您只能修改自己");
+							return;
+						}else if(window.session_userrole_id == 2){
+							if(userrole != 3 && window.session_id != rec.id){
+								Ext.Msg.alert("提示","您只能修改自己");
+								return;
+							}
+						}
+						add_edit_Window.setTitle("编辑用户");
 						add_edit_Panel.form.setValues(values);
 						add_edit_Window.show();
 					}else{
@@ -247,9 +266,23 @@ userPanel = function(){
 				text:"删除",
 				iconCls:"btn-del",
 				handler:function(){
+					/**判断用户等级
+					 * 1：超级管理员：可删除2.3
+					 * 2：管理员：可删除3
+					 * 3：员工：无法删除
+					 * */
+					if(window.session_userrole_id == 3){
+						Ext.Msg.alert("提示","您不能删除任何人");
+						return;
+					}
 					//判断是否选中某条记录
 					if(userpanel.getSelectionModel().hasSelection()){
 						var rec = userpanel.getSelectionModel().selected.items[0].data;
+						var userrole = whatRole(rec.userrole);
+						if(window.session_userrole_id == 2 && userrole != 3){
+							Ext.Msg.alert("提示","您只能删除员工");
+							return;
+						}
 						Ext.Msg.confirm("确认","确认删除以下用户？<br/>" + rec.username, function(btn){
 							if(btn == "yes"){
 								Ext.Ajax.request({

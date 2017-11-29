@@ -20,6 +20,7 @@ Ext.onReady(function(){
 	window.session_id = Ext.getDom('session_id').value;
 	window.session_username = Ext.getDom('session_username').value;
 	window.session_password = Ext.getDom('session_password').value;
+	window.session_userrole_id = Ext.getDom("session_userrole_id").value;
 	window.session_userrole = Ext.getDom('session_userrole').value;
 	
 	creatViewport = function(){
@@ -90,7 +91,7 @@ Ext.onReady(function(){
 			fieldLabel:"确认密码",
 			inputType:"password",  
             vtype:'password',  
-            initialPassField:'new_password'
+            initialPassField:'new_password'//Ext.apply将该字段与initialPassField所指定id的字段值进行比较
 		}],
 		buttons:[{
 			text:"确定",
@@ -102,13 +103,10 @@ Ext.onReady(function(){
 				}
 				//得到面板的所有字段的值
 				var session_userLogin = changePasswordPanel.getForm().getValues();
-				var old_password = session_userLogin.old_password.trim();
-				var new_password = session_userLogin.new_password.trim();
-				var confirm_password = session_userLogin.comfirm_password;
 				//判断旧密码是否输入正确
-				if(old_password == window.session_password){
+				if(session_userLogin.old_password.trim() == window.session_password){
 					//判断新密码和确认密码是否已填
-					if(new_password != "" && confirm_password != ""){
+					if(session_userLogin.new_password.trim() != ""){
 						Ext.Ajax.request({
 						url:"../changePassword",
 						method:"post",

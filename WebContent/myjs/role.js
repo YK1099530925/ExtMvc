@@ -41,10 +41,19 @@ rolePanel = function(){
 					
 				}
 			},{
-				text:"删除",
+				text:"日志",
 				iconCls:"btn-del",
 				handler:function(){
-					
+					Ext.Ajax.request({
+						url:"../login_log",
+						method:"post",
+						params:{'username':'yk',
+								'password':'123123'},
+						success:function(response,options){
+							alert(response.responseText);
+						},
+						type:"json"
+					});
 				}
 			}
 		],

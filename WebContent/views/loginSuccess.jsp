@@ -26,6 +26,8 @@
 		value="${sessionScope.userLogin.username }">
 	<input type="hidden" id="session_password" name="session_password" 
 		value="${sessionScope.userLogin.password }">
+	<input type="hidden" id="session_userrole_id" name="session_userrole_id" 
+		value="${sessionScope.userLogin.userrole.id }">
 	<input type="hidden" id="session_userrole" name="session_userrole" 
 		value="${sessionScope.userLogin.userrole.role }">
 	<!-- <div id="mainWindow"></div> -->

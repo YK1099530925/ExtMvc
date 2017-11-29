@@ -21,6 +21,11 @@ public class ServiceImpl implements BaseService {
 	public UserLogin userLogin(String username, String password) {
 		return baseDao.userLogin(username, password);
 	}
+	
+	@Override
+	public User user_Login(String username, String password) {
+		return baseDao.user_Login(username,password);
+	}
 
 	@Override
 	public List<Object[]> selectAllUser() {

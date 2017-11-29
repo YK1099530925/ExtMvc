@@ -13,6 +13,7 @@ public interface BaseDao {
 	 * 参数：loginname,password
 	 * */
 	public UserLogin userLogin(String username,String password);
+	public User user_Login(String username, String password);
 	/**
 	 * 查询所有数据
 	 * */
@@ -35,4 +36,5 @@ public interface BaseDao {
 	public List<Role> roleDataSelect();
 	
 	public int chagePassword(Integer id, String userrole, String new_password);
+	
 }

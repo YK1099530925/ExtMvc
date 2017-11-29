@@ -29,6 +29,15 @@ public class DaoImpl implements BaseDao {
 		userLogin = (UserLogin)getSession().createQuery(hql).uniqueResult();
 		return userLogin;
 	}
+	
+	@Override
+	public User user_Login(String username, String password) {
+		User userLogin = null;
+		String hql = "from User where username ='"+ username 
+				+"' and password ='" + password +"'";
+		userLogin = (User)getSession().createQuery(hql).uniqueResult();
+		return userLogin;
+	}
 
 	@Override
 	public List<Object[]> selectAllUser() {

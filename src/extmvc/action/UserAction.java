@@ -38,21 +38,20 @@ public class UserAction {
 	 * @ResponseBody :返回的json中有中文前台获取会出现乱码，可以在@RequestMapping里
 	 * 		设置produces="application/json;charset=utf-8"
 	 */
-	@RequestMapping(value="/loginform",method=RequestMethod.GET,
+	@RequestMapping(value="/loginform",method=RequestMethod.POST,
 			produces="application/json;charset=utf-8")
 	@ResponseBody
-	public String login(@RequestParam("username") String username,
-			@RequestParam("password") String password, Map<String, Object> map){
-		/*发送给前台的响应信息*/
+	public String login(String username,String password, String login,
+			Map<String, Object> map){
 		String msg = "";
-		/*检查用户登录*/
-		UserLogin userLogin = baseService.userLogin(username, password);
+		Object userLogin = null;
+		if(login.equals("UserLogin")){
+			userLogin = baseService.userLogin(username, password);
+		}else{
+			userLogin = baseService.user_Login(username, password);
+		}
 		/*判断用户是否为空*/
 		if(userLogin != null){
-			/* *
-			 * 将user放在请求域中，同时添加@SessionAttribute
-			 * 注解将user放入session中，用来保存登录信息
-			 * */
 			map.put("userLogin", userLogin);
 			msg = "{success:true,msg:'登录成功...'}";
 		}else{
@@ -76,8 +75,6 @@ public class UserAction {
 		}
 		JSONObject json2 = new JSONObject();
 		json2.put("roots", jsonArray);
-		System.out.println("json2" + json2);
-		
 		return json2.toString();
 		
 		/**如果使用延迟加载，在转换成json数据格式的时候，外键的值，存放不进来，
