@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+
+	<!-- spring和springmvc整合出现的问题
+		导致所有的类都被初始化两次，解决办法：
+		1:让Spring扫描这些包，springmvc扫描另外的包（但是如果按模块划分，导致一个包下所有类型的类都有，就无法使用此方法）
+		2:使用exclude-filter和include-filter 子节点来规定只能扫描的注解
+			use-default-filters="false"让其不使用默认的filter
+		在Spring的配置文件中配置以下信息，代表Spring不扫描此注解的类：
+		<context:exclude-filter type="annotation" 
+			expression="org.springframework.stereotype.Controller"/>
+		<context:exclude-filter type="annotation" 
+			expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+			
+		注：Springmvc的IOC容器中的bean可以引用Spring容器中的bean，反之则不行
+	 -->
+	
+	<context:component-scan base-package="extmvc" use-default-filters="false">
+		<!-- Springmvc的配置文件，让它只扫描 控制器 -->
+		<context:include-filter type="annotation" 
+			expression="org.springframework.stereotype.Controller"/>
+			<!-- ControllerAdvice 处理异常的注解 -->
+		<context:include-filter type="annotation" 
+			expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+	</context:component-scan>
+	
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<!-- 配置拦截器:只拦截loginform的请求，如果不想拦截哪个： mvc:exclude-mapping-->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/loginform"/>
+			<bean class="extmvc.interc.LoginInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<!-- 解决静态资源文件问题，在本项目中有引入了Extjs静态资源文件 -->
+	<mvc:default-servlet-handler/>
+	
+	<mvc:annotation-driven></mvc:annotation-driven>
+	
+</beans>

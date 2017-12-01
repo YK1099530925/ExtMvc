@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +18,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import extmvc.entities.Role;
 import extmvc.entities.User;
 import extmvc.entities.UserLogin;
+import extmvc.logger.MyLogger;
 import extmvc.service.BaseService;
+import extmvc.service.impl.UserLoginLimite;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -30,6 +35,9 @@ public class UserAction {
 	@Autowired
 	private BaseService baseService;
 	
+	@Autowired
+	private UserLoginLimite loginLimite;
+	
 	/**
 	 * 用注解@RequestParam绑定请求参数到方法入参
 	 * @param username
@@ -42,7 +50,12 @@ public class UserAction {
 			produces="application/json;charset=utf-8")
 	@ResponseBody
 	public String login(String username,String password, String login,
-			Map<String, Object> map){
+			Map<String, Object> map, HttpServletRequest request){
+		//MyLogger.userActionLogger.info(login + "登录：登录名：" + username);
+		
+		//判断用户是否在线及处理
+		String limite = loginLimite.userLoginLimite(username, request);
+		
 		String msg = "";
 		Object userLogin = null;
 		if(login.equals("UserLogin")){

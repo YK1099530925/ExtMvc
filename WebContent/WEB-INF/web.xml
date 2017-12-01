@@ -42,7 +42,7 @@
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
-				/WEB-INF/dispatcherServlet-servlet.xml
+				classpath:dispatcherServlet-servlet.xml
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
@@ -79,4 +79,5 @@
   		<filter-name>HiddenHttpMethodFilter</filter-name>
   		<url-pattern>/*</url-pattern>
   	</filter-mapping>
+  	
 </web-app>
