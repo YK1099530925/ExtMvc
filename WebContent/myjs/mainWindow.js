@@ -180,7 +180,14 @@ Ext.onReady(function(){
 						text: "退出系统",
 						iconCls: "x-btn-exit",
 						handler: function() {
-							window.location.href = "../index.jsp";
+							Ext.Ajax.request({
+								url:"../exit",
+								method:"post",
+								params:{"username":window.session_username},
+								callback:function(options,success,response){
+									window.location.href = "../index.jsp";
+								}
+							});
 						}
 					}]
 				})

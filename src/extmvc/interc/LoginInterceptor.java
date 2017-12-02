@@ -27,7 +27,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		super.postHandle(request, response, handler, modelAndView);
 	}
 
-	//请求执行方法之前执行
+	//请求执行方法之前执行（在此先只做一个提示，提示用户，本账户在另一地方登录，然后在登录中将对方挤掉）
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
 			Object handler)throws Exception {
@@ -57,9 +57,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		if(isLogin){
 			Map<String, Object> loginOutTime = (Map<String, Object>) session.getServletContext().getAttribute("loginOutTime");
 			System.out.println("用户" + user.getUsername() + "于" + loginOutTime.get(user.getUsername()) + "在别处登录");
-			loginOutTime.remove(user.getUsername());
-			session.getServletContext().setAttribute("loginOutTime", loginOutTime);
-			return false;
+			//loginOutTime.remove(user.getUsername());
+			//session.getServletContext().setAttribute("loginOutTime", loginOutTime);
+			//return false;
 		}
 		return super.preHandle(request, response, handler);
 	}
