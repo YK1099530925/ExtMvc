@@ -8,13 +8,13 @@
 <script type="text/javascript" src="../extjs/ext-all-debug.js"></script>
 <link rel="stylesheet" type="text/css" href="../resources/css/ext-all.css">
 <link rel="stylesheet" type="text/css" href="../css/main.css">
-<script type="text/javascript" src="../myjs/IsHasSession.js"></script>
 <script type="text/javascript" src="../myjs/role.js"></script>
 <script type="text/javascript" src="../myjs/user.js"></script>
 <script type="text/javascript" src="../myjs/centerPanel.js"></script>
 <script type="text/javascript" src="../myjs/addTabPage.js"></script>
 <script type="text/javascript" src="../myjs/mainWindow.js"></script>
-
+<!-- defer：表示在页面加载完成之后执行该js -->
+<script defer="defer" type="text/javascript" src="../myjs/IsHasSession.js"></script>
 <title>用户管理</title>
 </head>
 <body>
@@ -33,4 +33,5 @@
 		value="${sessionScope.userLogin.userrole.role }">
 	<!-- <div id="mainWindow"></div> -->
 </body>
+
 </html>

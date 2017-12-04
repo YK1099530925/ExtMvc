@@ -5,6 +5,7 @@ var IsHasSession = {
 		Ext.Ajax.request({
 			url:"../isHasSession",
 			method:"post",
+			params:{"username":window.session_username},
 			disableCaching:true,//禁止缓存
 			timeout:300000,//最大等待时间，超时则会触发超时
 			success:function(response,options){
@@ -24,6 +25,6 @@ var IsHasSession = {
 			}
 		});
 	},
-	interval:20000//1000=1s 经过20秒请求一次
+	interval:10000//1000=1s 经过20秒请求一次
 }
 Ext.TaskManager.start(IsHasSession);

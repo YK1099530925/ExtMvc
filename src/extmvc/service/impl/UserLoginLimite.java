@@ -33,7 +33,7 @@ public class UserLoginLimite {
 				loginOutTime.put(username, new Date());
 				
 				//剔除用户
-				loginUserMap.remove(username);
+				//loginUserMap.remove(username);
 			}
 		}
 		

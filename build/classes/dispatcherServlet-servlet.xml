@@ -36,12 +36,12 @@
 	</bean>
 	
 	<!-- 配置拦截器:只拦截loginform的请求，如果不想拦截哪个： mvc:exclude-mapping-->
-	<mvc:interceptors>
+<!-- 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/loginform"/>
 			<bean class="extmvc.interc.LoginInterceptor"></bean>
 		</mvc:interceptor>
-	</mvc:interceptors>
+	</mvc:interceptors> -->
 	
 	<!-- 解决静态资源文件问题，在本项目中有引入了Extjs静态资源文件 -->
 	<mvc:default-servlet-handler/>

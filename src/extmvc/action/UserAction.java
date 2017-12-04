@@ -1,11 +1,11 @@
 package extmvc.action;
 
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +21,7 @@ import extmvc.entities.UserLogin;
 import extmvc.logger.MyLogger;
 import extmvc.service.BaseService;
 import extmvc.service.impl.UserLoginLimite;
+import extmvc.service.impl.UserLoginLimiteTest;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -38,11 +39,15 @@ public class UserAction {
 	@Autowired
 	private UserLoginLimite loginLimite;
 	
+	@Autowired
+	private UserLoginLimiteTest loginLimiteTest;
+	
 	/**
 	 * 用注解@RequestParam绑定请求参数到方法入参
 	 * @param username
 	 * @param password
 	 * ResponseBody:注解返回的是一个json
+	 * @throws UnknownHostException 
 	 * @ResponseBody :返回的json中有中文前台获取会出现乱码，可以在@RequestMapping里
 	 * 		设置produces="application/json;charset=utf-8"
 	 */
@@ -50,11 +55,29 @@ public class UserAction {
 			produces="application/json;charset=utf-8")
 	@ResponseBody
 	public String login(String username,String password, String login,
-			Map<String, Object> map, HttpServletRequest request){
+			Map<String, Object> map, HttpServletRequest request) throws UnknownHostException{
 		//MyLogger.userActionLogger.info(login + "登录：登录名：" + username);
 		
+		//获取客户端的真实地址:如192.168.0.100
+		String ip = request.getHeader("x-forwarded-for");
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+	        ip = request.getHeader("WL-Proxy-Client-IP");
+	    }
+	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+	        ip = request.getRemoteAddr();
+	    }
+	    if(ip.equals("0:0:0:0:0:0:0:1")){
+	    	System.out.println("本地ip:" + ip + "------------------------");
+	    }
+		
+		
+		
 		//判断用户是否在线及处理
-		String limite = loginLimite.userLoginLimite(username, request);
+		//String limite = loginLimite.userLoginLimite(username, request);
+	    loginLimiteTest.userLoginLimite(username, request);
 		
 		String msg = "";
 		Object userLogin = null;
