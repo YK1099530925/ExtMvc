@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class UserLoginLimiteTest {
 	//实现多个用户在线登录，第一个用户能够剔除后续用户，list中存放用户的sessionid
 	private static Map<String, List<String>> loginUserMap = new HashMap<>();//存储在线用户
-	
 	public String userLoginLimite(String username, HttpServletRequest request){
 		
 		String sessionId = request.getSession().getId();
@@ -28,6 +27,7 @@ public class UserLoginLimiteTest {
 				return "success";
 			}
 		}
+		//以下操作表示用户第一次登录
 		sessionIds.add(sessionId);
 		loginUserMap.put(username, sessionIds);
 		request.getSession().getServletContext().setAttribute("loginUserMap", loginUserMap);

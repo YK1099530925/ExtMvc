@@ -20,7 +20,7 @@ Ext.onReady(function(){
 	window.session_id = Ext.getDom('session_id').value;
 	window.session_username = Ext.getDom('session_username').value;
 	window.session_password = Ext.getDom('session_password').value;
-	window.session_userrole_id = Ext.getDom("session_userrole_id").value;
+	window.session_userrole_id = Ext.getDom('session_userrole_id').value;
 	window.session_userrole = Ext.getDom('session_userrole').value;
 	
 	creatViewport = function(){
@@ -314,4 +314,36 @@ Ext.onReady(function(){
 		});
 		
 	creatViewport();
+	
+	//轮训session，判断当前用户是否还存在（即：是否在其他地方登录）
+var IsHasSession = {
+	run:function(){
+		Ext.Ajax.request({
+			url:"../isHasSession",
+			method:"post",
+			params:{"username":window.session_username,
+					"userrole":window.session_userrole},
+			disableCaching:true,
+			timeout:300000,//最大等待时间
+			success:function(response,options){
+				var res = Ext.JSON.decode(response.responseText);//Json对象化
+				if(!res.success){
+					Ext.Msg.alert("成功","系统已超时，请重新登录...",function(){
+						window.location.href = "../index.jsp";
+					});
+					Ext.TaskManager.stop(IsHasSession);//停止该任务
+				}
+			},
+			failure:function(response,options){
+				Ext.Msg.alert("失败","系统已超时，请重新登录...",function(){
+						window.location.href = "../index.jsp";
+					});
+				Ext.TaskManager.stop(IsHasSession);//停止该任务
+			}
+		});
+	},
+	interval:10000//1000=1s 经过20秒请求一次
+}
+Ext.TaskManager.start(IsHasSession);
 })
+

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import extmvc.entities.UserLogin;
@@ -32,19 +33,11 @@ public class Exit {
 	}
 	
 	//判断session是否还存在
-	@RequestMapping(value="/isHasSession")
+	@RequestMapping(value="/isHasSession",method=RequestMethod.POST)
 	@ResponseBody
-	public String isHasSession(String username, HttpServletRequest request){
+	public String isHasSession(String username, String userrole, HttpServletRequest request){
 		
-		/* 只能一方登录，不能实现双方同时在线
-		 * 轮训session，60秒发送一次请求，如果在另一地方登录，然后将session中的sessionid保存成为另一处的sessionid
-		 * 然后将本地的session清除，1：在另一地方登录，如何清除本地session？（本地的一次回话即session，如果未关闭回话
-		 * sessionid应该不会变，因此，当另一地方登录的时候，将另一处的sessionid放入loginUserMap中，将本地的sessionid
-		 * 从中移除，所以判断账户是否在另一处登录，只需要判断此处的loginUserMap中的username对应的sessionid是否是本地的sessionid
-		 * 如果不是，将告诉前台，账户在另一处登录，或者是系统超时），因此只需要拿到loginUserMap判断就知道是否在另一处登录
-		 * 通过session中的userLogin来判断
-		 * */
-		
+		//System.out.println("username:" + username + ",userrole:" + userrole);
 		//获取session
 		HttpSession session = request.getSession();
 		//获取sessionid
