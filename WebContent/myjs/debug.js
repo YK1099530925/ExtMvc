@@ -112,12 +112,23 @@ Ext.onReady(function(){
 					url:"loginform",
 					method:"post",
 					waitMsg:"正在登录，请稍等...",
-					success:function(form,action){
-						Ext.Msg.alert("提示",action.result.msg);
-						window.location.href="views/loginSuccess.jsp";
+					success:function(form,response){
+						if(response.result.limite == "false"){
+							Ext.Msg.confirm("等待","等待验证",function(e){
+								if(e=="no"){
+									alert("取消验证");
+									//在这儿发送取消验证的请求
+								}
+							});
+							Ext.TaskManager.start(isLogin);
+						}else{
+							Ext.Msg.alert("成功",response.result.msg);
+							window.location.href="views/loginSuccess.jsp";
+						}
+						
 					},
-					failure:function(form,action){
-						Ext.Msg.alert("提示",action.result.msg);
+					failure:function(form,response){
+						Ext.Msg.alert("错误",response.result.msg);
 					}
 				});
 				
@@ -128,4 +139,36 @@ Ext.onReady(function(){
 		}]
 	});
 	
+	//问题：如果在直验证的时候，对面没有允许（即删掉了sessionid），设置success为-1表示为删掉了sessionid，则提示对方未允许
+	var isLogin = {
+		run:function(){
+			Ext.Ajax.request({
+				url:"isHasSession",
+				method:"post",
+				params:loginform.getForm().getValues(),
+				disableCaching:true,
+				timeout:100000,//最大等待时间
+				success:function(response,options){
+					var res = Ext.JSON.decode(response.responseText);
+					if(res.success){
+						//因为如果返回-1，也是代表的真（一切不为0的数都表示真）
+						if(res.success == -1){
+							Ext.Msg.alert("提示","未允许登录，请重新登录");
+							Ext.TaskManager.stop(isLogin);
+						}else{
+							Ext.Msg.alert("isLogin","登录成功");
+							window.location.href = "views/loginSuccess.jsp";
+							Ext.TaskManager.stop(isLogin);
+						}
+					}
+				},
+				failure:function(response,options){
+					Ext.Msg.alert("失败","系统已超时，请重新登录...");
+					window.location.href = "#";
+					Ext.TaskManager.stop(isLogin);
+				}
+			});
+		},
+		interval:5000
+	}
 });

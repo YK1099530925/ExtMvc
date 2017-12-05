@@ -345,5 +345,47 @@ var IsHasSession = {
 	interval:10000//1000=1s 经过20秒请求一次
 }
 Ext.TaskManager.start(IsHasSession);
+
+//循环检测后台是否有存在false的用户，是则显示提示框，允许或者不允许
+var checkHasNewUser = {
+	run:function(){
+		Ext.Ajax.request({
+			url:"../checkHasNewUser",
+			method:"post",
+			params:{"username":window.session_username},
+			disableCaching:true,
+			timeout:300000,//最大等待时间
+			success:function(response,options){
+				var res = Ext.JSON.decode(response.responseText);
+				//(返回键sessionid对应的值)如果存在则提示，并确认（如果返回了false，代表是该用户是第一个用户，能处理后续用户的登录状态）
+				if(!res.success){
+					Ext.MessageBox.confirm("提示","是否允许该用户在另一处登录",function(e){
+						var isAllow = false;
+						if(e == "yes"){
+							isAllow = true;
+						}
+						Ext.Ajax.request({
+								url:"../isAllowLogin",
+								method:"post",
+								params:{"username":window.session_username,
+										"isAllow":isAllow},
+								success:function(response,options){
+								}
+							});
+					});
+				}else{
+					//如果此用户不存在了，那么停止此定时器
+				}
+			},
+			failure:function(response,options){
+				Ext.Msg.alert("错误提示","请求等待时间超时");
+				Ext.TaskManager.stop(checkHasNewUser);
+				window.location.href="../index.jsp";
+			}
+		});
+	},
+	interval:5000
+}
+Ext.TaskManager.start(checkHasNewUser);
 })
 

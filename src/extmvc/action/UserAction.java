@@ -57,6 +57,29 @@ public class UserAction {
 	public String login(String username,String password, String login,
 			Map<String, Object> map, HttpServletRequest request) throws UnknownHostException{
 		//MyLogger.userActionLogger.info(login + "登录：登录名：" + username);
+		String msg = "";
+		
+		Object userLogin = null;
+		if(login.equals("UserLogin")){
+			userLogin = baseService.userLogin(username, password);
+		}else{
+			userLogin = baseService.user_Login(username, password);
+		}
+		/*判断用户是否为空*/
+		if(userLogin != null){
+			map.put("userLogin", userLogin);
+			msg = "{success:true,msg:'登录成功...'";
+		}else{
+			msg = "{success:false,msg:'登录失败，用户名或者密码错误'}";
+			return msg;
+		}
+		
+		//判断用户是否在线及处理
+		//String limite = loginLimite.userLoginLimite(username, request);
+		//如果为false则表示需要第一个用户验证，为true则直接登录
+		String limite = loginLimiteTest.userLoginLimite(username, request);
+		
+		msg = msg + ",'limite':'" + limite + "'}";
 		
 		//获取客户端的真实地址:如192.168.0.100
 		String ip = request.getHeader("x-forwarded-for");
@@ -73,26 +96,6 @@ public class UserAction {
 	    	System.out.println("本地ip:" + ip + "------------------------");
 	    }
 		
-		
-		
-		//判断用户是否在线及处理
-		//String limite = loginLimite.userLoginLimite(username, request);
-	    loginLimiteTest.userLoginLimite(username, request);
-		
-		String msg = "";
-		Object userLogin = null;
-		if(login.equals("UserLogin")){
-			userLogin = baseService.userLogin(username, password);
-		}else{
-			userLogin = baseService.user_Login(username, password);
-		}
-		/*判断用户是否为空*/
-		if(userLogin != null){
-			map.put("userLogin", userLogin);
-			msg = "{success:true,msg:'登录成功...'}";
-		}else{
-			msg = "{success:false,msg:'登录失败，用户名或者密码错误'}";
-		}
 		return msg;
 	}
 	

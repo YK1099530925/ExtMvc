@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
 //Tansactional:编程式事务注解
+//此方法实现的是，后续用户登录将第一个用户挤掉
 @Service
 //@Transactional
 public class UserLoginLimite {
