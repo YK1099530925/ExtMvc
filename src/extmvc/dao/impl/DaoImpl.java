@@ -40,10 +40,10 @@ public class DaoImpl implements BaseDao {
 	}
 
 	@Override
-	public List<Object[]> selectAllUser() {
+	public List<Object[]> selectAllUser(int start, int limit) {
 		List<Object[]> users = null;
-		String hql = "select u.id, u.username, u.age, r.role from User u, Role r where u.userrole = r.id";
-		users = getSession().createQuery(hql).list();
+		String hql = "select u.id, u.username, u.age, r.role from User u, Role r where u.userrole = r.id order by u.id";
+		users = getSession().createQuery(hql).setFirstResult(start).setMaxResults(limit).list();
 		return users;
 	}
 
@@ -87,6 +87,14 @@ public class DaoImpl implements BaseDao {
 		String hql = "update " + table +" set password = '" + new_password 
 				+"' where id=" + id;
 		return getSession().createQuery(hql).executeUpdate();
+	}
+
+	@Override
+	public int selectUserCount() {
+		String hql = "select count(*) from User";
+		Long res = (Long) getSession().createQuery(hql).uniqueResult();
+		int total = res.intValue();
+		return total;
 	}
 
 }

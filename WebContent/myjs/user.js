@@ -44,7 +44,9 @@
  * });
  * */
 userStore = new Ext.data.JsonStore({
-	autoLoad:true,
+	id:"userStore",
+	autoLoad: true,
+	pageSize:4,
 	fields:[
 		{name:"id",type:"int"},
 		{name:"username",type:"string"},
@@ -54,9 +56,11 @@ userStore = new Ext.data.JsonStore({
     proxy:{
     	type: 'ajax',
     	url:"../userDataSelect",
+    	//url:"../data/user.json",
         reader: {//reader解析器，解析json，array等数据
             type: 'json',
-            root: 'roots'
+            root: 'roots',
+        	totalProperty:"total"
         }
     }
 });
@@ -202,11 +206,10 @@ whatRole = function(userrole){
 
 userPanel = function(){
 	userpanel = new Ext.grid.Panel({
-		width:window.innerWidth - 200,
-		height:300,
+		width:window.innerWidth - 210,
+		height:200,
 		frame:true,
-		tbar:[
-			{
+		tbar:[{
 				text:"新增",
 				iconCls:"btn-add",
 				handler:function(){
@@ -266,11 +269,6 @@ userPanel = function(){
 				text:"删除",
 				iconCls:"btn-del",
 				handler:function(){
-					/**判断用户等级
-					 * 1：超级管理员：可删除2.3
-					 * 2：管理员：可删除3
-					 * 3：员工：无法删除
-					 * */
 					if(window.session_userrole_id == 3){
 						Ext.Msg.alert("提示","您不能删除任何人");
 						return;
@@ -304,9 +302,14 @@ userPanel = function(){
 						Ext.Msg.alert("提示","请选择要删除的用户");
 					}
 				}
-			}
-			
-		],
+		}],
+		//添加分页
+		bbar: [{
+	        xtype: 'pagingtoolbar',
+	        store: userStore,
+	        displayInfo: true,
+	        displayMsg:"记录：第{0}条-第{1}条，共{2}条"
+	    }],
 		viewConfig:{
 			forceFit:true,
 			stripeRows:true

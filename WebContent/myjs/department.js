@@ -1,17 +1,18 @@
-roleStore = Ext.create('Ext.data.JsonStore',{
+departmentStore = Ext.create('Ext.data.JsonStore',{
 	storeId:"id_roleStore",
 	autoLoad:true,
 	fields:[
 		{name:"id",type:"int"},
-		{name:"role",type:"string"},
-		{name:"describ",type:"string"}
+		{name:"depart",type:"string"},
+		{name:"empCount",type:"int"},
+		{name:"xz",type:"string"}
 	],
     proxy:{
     	type: 'ajax',
-    	url:"../roleDataSelect",
+    	url:"../data/department.json",
         reader: {
             type: 'json',
-            root: 'roles'
+            root: 'departs'
         }
     }
 });
@@ -22,8 +23,9 @@ selModel = new Ext.selection.CheckboxModel({
 	checkOnly:true
 });
 
-rolePanel = function(){
-	rolepanel = Ext.create('Ext.grid.Panel',{
+
+departmentPanel = function(){
+	departmentpanel = Ext.create('Ext.grid.Panel',{
 		width:window.innerWidth - 200,
 		height:300,
 		frame:true,
@@ -54,17 +56,19 @@ rolePanel = function(){
 		},
 		//用这两种方式都能讲Store添加到grid中
 		//store:Ext.data.StoreManager.lookup("id_roleStore"),
-		store:roleStore,
+		store:departmentStore,
 		selModel:selModel,
 		columns:[
 			{
 				header:"ID",flex:1,dataIndex:"id",sortable:true
 			},{
-				header:"角色",flex:1,dataIndex:"role",sortable:true
+				header:"部门",flex:1,dataIndex:"depart",sortable:true
 			},{
-				header:"描述",flex:1,dataIndex:"describ",sortable:true
+				header:"人数",flex:1,dataIndex:"empCount",sortable:true
+			},{
+				header:"性质",flex:1,dataIndex:"xz",sortable:true
 			}
 		]
 	});
-	return rolepanel;
+	return departmentpanel;
 }

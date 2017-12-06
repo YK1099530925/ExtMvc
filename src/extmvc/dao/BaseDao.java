@@ -17,7 +17,7 @@ public interface BaseDao {
 	/**
 	 * 查询所有数据
 	 * */
-	public List<Object[]> selectAllUser();
+	public List<Object[]> selectAllUser(int start, int limit);
 	/**
 	 * 通过id查询是否存在此人
 	 * */
@@ -36,5 +36,6 @@ public interface BaseDao {
 	public List<Role> roleDataSelect();
 	
 	public int chagePassword(Integer id, String userrole, String new_password);
+	public int selectUserCount();
 	
 }

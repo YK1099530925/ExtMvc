@@ -28,8 +28,8 @@ public class ServiceImpl implements BaseService {
 	}
 
 	@Override
-	public List<Object[]> selectAllUser() {
-		return baseDao.selectAllUser();
+	public List<Object[]> selectAllUser(int start, int limit) {
+		return baseDao.selectAllUser(start, limit);
 	}
 
 	@Override
@@ -60,6 +60,11 @@ public class ServiceImpl implements BaseService {
 	@Override
 	public int changePassword(Integer id, String userrole, String new_password) {
 		return baseDao.chagePassword(id,userrole,new_password);
+	}
+
+	@Override
+	public int selectUserCount() {
+		return baseDao.selectUserCount();
 	}
 
 }

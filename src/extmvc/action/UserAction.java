@@ -58,7 +58,6 @@ public class UserAction {
 			Map<String, Object> map, HttpServletRequest request) throws UnknownHostException{
 		//MyLogger.userActionLogger.info(login + "登录：登录名：" + username);
 		String msg = "";
-		
 		Object userLogin = null;
 		if(login.equals("UserLogin")){
 			userLogin = baseService.userLogin(username, password);
@@ -73,36 +72,19 @@ public class UserAction {
 			msg = "{success:false,msg:'登录失败，用户名或者密码错误'}";
 			return msg;
 		}
-		
 		//判断用户是否在线及处理
 		//String limite = loginLimite.userLoginLimite(username, request);
 		//如果为false则表示需要第一个用户验证，为true则直接登录
 		String limite = loginLimiteTest.userLoginLimite(username, request);
-		
 		msg = msg + ",'limite':'" + limite + "'}";
-		
-		//获取客户端的真实地址:如192.168.0.100
-		String ip = request.getHeader("x-forwarded-for");
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("Proxy-Client-IP");
-		}
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-	        ip = request.getHeader("WL-Proxy-Client-IP");
-	    }
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-	        ip = request.getRemoteAddr();
-	    }
-	    if(ip.equals("0:0:0:0:0:0:0:1")){
-	    	System.out.println("本地ip:" + ip + "------------------------");
-	    }
-		
 		return msg;
 	}
 	
 	@RequestMapping(value="/userDataSelect",produces="application/json;charset=utf-8")
 	@ResponseBody
-	public String userDataSelect(){
-		List<Object[]> users = baseService.selectAllUser();
+	public String userDataSelect(String start, String limit){//start:为extjs分页传过来的起始数,limit是每页的最大数
+		int total = baseService.selectUserCount();
+		List<Object[]> users = baseService.selectAllUser(Integer.parseInt(start),Integer.parseInt(limit));
 		JSONArray jsonArray = new JSONArray();
 		Map<String, Object> map = new HashMap<>();
 		for(Object obj[] : users){
@@ -114,6 +96,7 @@ public class UserAction {
 		}
 		JSONObject json2 = new JSONObject();
 		json2.put("roots", jsonArray);
+		json2.put("total", total);
 		return json2.toString();
 		
 		/**如果使用延迟加载，在转换成json数据格式的时候，外键的值，存放不进来，

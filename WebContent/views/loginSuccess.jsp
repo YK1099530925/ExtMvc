@@ -10,6 +10,7 @@
 <link rel="stylesheet" type="text/css" href="../css/main.css">
 <script type="text/javascript" src="../myjs/role.js"></script>
 <script type="text/javascript" src="../myjs/user.js"></script>
+<script type="text/javascript" src="../myjs/department.js"></script>
 <script type="text/javascript" src="../myjs/centerPanel.js"></script>
 <script type="text/javascript" src="../myjs/addTabPage.js"></script>
 <script type="text/javascript" src="../myjs/mainWindow.js"></script>
@@ -19,15 +20,15 @@
 	<!-- 用input来保存session中用户的信息，以便在Ext中获取值
 		  保存的信息只需要：id，username，password，userrole.role
 	 -->
-	 <input type="text" id="session_id" name="session_id" 
+	 <input type="hidden" id="session_id" name="session_id" 
 		value="${sessionScope.userLogin.id }">
-	<input type="text" id="session_username" name="session_username" 
+	<input type="hidden" id="session_username" name="session_username" 
 		value="${sessionScope.userLogin.username }">
-	<input type="text" id="session_password" name="session_password" 
+	<input type="hidden" id="session_password" name="session_password" 
 		value="${sessionScope.userLogin.password }">
-	<input type="text" id="session_userrole_id" name="session_userrole_id" 
+	<input type="hidden" id="session_userrole_id" name="session_userrole_id" 
 		value="${sessionScope.userLogin.userrole.id }">
-	<input type="text" id="session_userrole" name="session_userrole" 
+	<input type="hidden" id="session_userrole" name="session_userrole" 
 		value="${sessionScope.userLogin.userrole.role }">
 	<!-- <div id="mainWindow"></div> -->
 </body>

@@ -359,7 +359,8 @@ var checkHasNewUser = {
 				var res = Ext.JSON.decode(response.responseText);
 				//(返回键sessionid对应的值)如果存在则提示，并确认（如果返回了false，代表是该用户是第一个用户，能处理后续用户的登录状态）
 				if(!res.success){
-					Ext.MessageBox.confirm("提示","是否允许该用户在另一处登录",function(e){
+					Ext.MessageBox.confirm("提示","是否允许该用户在另一处登录</br>"+"ip地址："+res.ip+"</br>登录时间："+res.time
+						,function(e){
 						var isAllow = false;
 						if(e == "yes"){
 							isAllow = true;

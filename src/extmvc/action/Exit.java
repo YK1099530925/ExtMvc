@@ -1,5 +1,6 @@
 package extmvc.action;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -23,7 +24,12 @@ public class Exit {
 		Map<String, Map<String, Boolean>> loginUserMap = (Map<String, Map<String, Boolean>>) session.getServletContext().getAttribute("loginUserMap");
 		sessionIds = loginUserMap.get(username);
 		sessionIds.remove(sessionId);
-		loginUserMap.put(username, sessionIds);
+		//判断是否只剩最后一个用户
+		if(sessionIds.size() == 0){
+			loginUserMap.remove(username);
+		}else {
+			loginUserMap.put(username, sessionIds);
+		}
 		session.getServletContext().setAttribute("loginUserMap", loginUserMap);
 		session.removeAttribute("userLogin");
 		//session.invalidate();//调用此方法，将会触发sessionDestroyed监听器，将session销毁
@@ -67,15 +73,23 @@ public class Exit {
 		String sessionId = session.getId();
 		Map<String, Map<String, Boolean>> loginUserMap = (Map<String, Map<String, Boolean>>) session.getServletContext().getAttribute("loginUserMap");
 		Map<String, Boolean> sessionIds = loginUserMap.get(username);
+		//获取后面一个用户登录的时间
+		Map<String, Object> loginTime = (Map<String, Object>) session.getServletContext().getAttribute("loginTime");
+		Date time = (Date) loginTime.get(username);
+		//Ip一个sessionid一个ip，因此当用户登录的时候，获取为false那个的sessionid对应的ip
+		Map<String, Object> loginUserIp = (Map<String, Object>) session.getServletContext().getAttribute("loginUserIp");
+		String ip = "";
 		int i = 0;
 		for(String key : sessionIds.keySet()){
 			i++;
 			//判断是否是第一个登录的用户，是才有权限处理后续用户的登录
 			if(key.equals(sessionId) && i == 1){
-				//查找是否存在false，存在则返回
+				//查找是否存在false，存在则返回false和用户的信息
 				for(String key1 : sessionIds.keySet()){
 					if(!sessionIds.get(key1)){
-						return "{'success':false}";
+						ip = (String) loginUserIp.get(key1);
+						return "{'success':false,'ip':'"+ip+"','time':'"+time.toString()+"'}";
+						//return "{'success':false}";
 					}
 				}
 			}else if(key.equals(sessionId) && i > 1){//如果不是第一个用户，则返回true，不做任何处理

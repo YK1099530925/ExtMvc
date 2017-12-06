@@ -55,7 +55,7 @@ Ext.onReady(function(){
 		height:200,
 		width:300,
 		pageX:500,
-		pageY:200,
+		pageY:100,
 		frame:true,//是否渲染表单，给表单填充颜色
 		renderTo:"form",
 		buttonAlign:"center",

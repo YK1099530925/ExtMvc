@@ -10,7 +10,7 @@
 		if(nodeId == "userInfo"){
 			return userPanel();
 		}else if(nodeId == "deparInfo"){
-			return null;
+			return departmentPanel();
 		}else if(nodeId == "roleInfo"){
 			return rolePanel();
 		}
