@@ -81,7 +81,7 @@ class="org.apache.log4j.DailyRollingFileAppender">
    
      <!-- info log -->  
      <!-- name指定的是包名，这样只操作此包下的log -->
-   <logger name="extmvc.action" additivity="true">  
+   <logger name="extmvc" additivity="true">  
       <level value="INFO"></level>  
       <appender-ref ref="INFO-APPENDER" />  
       <appender-ref ref="console"/>

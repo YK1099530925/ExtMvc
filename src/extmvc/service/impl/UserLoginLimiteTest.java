@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
+import extmvc.logger.MyLogger;
+
 @Service
 public class UserLoginLimiteTest {
 	//实现多个用户在线登录，第一个用户能够剔除后续用户，list中存放用户的sessionid
@@ -38,11 +40,12 @@ public class UserLoginLimiteTest {
 		if(loginUserMap.containsKey(username)){
 			sessionIds = loginUserMap.get(username);
 			//System.out.println(sessionIds);
-			if(sessionIds.containsKey(sessionId)){
-				//System.out.println("此次登录还未退出");
+			if(sessionIds.containsKey(sessionId) && sessionIds.get(sessionId)){
+				System.out.println("此次登录还未退出");
 				return "success";
 			}
 			//第二次外地登录，先将其设置为false，等待第一个用户验证
+			MyLogger.userLoginLimiteTest.info("后续用户请求登录--用户名：" + username + "，请求时间：" + new Date() + "，请求ip：" + ip);
 			sessionIds.put(sessionId, false);
 			loginUserMap.put(username, sessionIds);
 			request.getSession().getServletContext().setAttribute("loginUserMap", loginUserMap);
@@ -54,6 +57,7 @@ public class UserLoginLimiteTest {
 		}
 		//以下操作表示用户第一次登录
 		//System.out.println("用户第一次登录");
+		MyLogger.userLoginLimiteTest.info("用户首次登录  --  用户名：" + username + "，登录时间：" + new Date() + "，登录ip：" + ip);
 		loginUserIp.put(sessionId, ip);
 		request.getSession().getServletContext().setAttribute("loginUserIp", loginUserIp);
 		loginTime.put(username, new Date());

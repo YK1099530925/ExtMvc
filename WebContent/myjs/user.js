@@ -46,6 +46,7 @@
 userStore = new Ext.data.JsonStore({
 	id:"userStore",
 	autoLoad: true,
+	//autoLoad: {start: 0, limit: 25},//start为发送给后台的起始数，limit是每页最大显示数据
 	pageSize:4,
 	fields:[
 		{name:"id",type:"int"},

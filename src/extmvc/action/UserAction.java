@@ -82,9 +82,9 @@ public class UserAction {
 	
 	@RequestMapping(value="/userDataSelect",produces="application/json;charset=utf-8")
 	@ResponseBody
-	public String userDataSelect(String start, String limit){//start:为extjs分页传过来的起始数,limit是每页的最大数
+	public String userDataSelect(int start, int limit){//start:为extjs分页传过来的起始数,limit是每页的最大数
 		int total = baseService.selectUserCount();
-		List<Object[]> users = baseService.selectAllUser(Integer.parseInt(start),Integer.parseInt(limit));
+		List<Object[]> users = baseService.selectAllUser(start,limit);
 		JSONArray jsonArray = new JSONArray();
 		Map<String, Object> map = new HashMap<>();
 		for(Object obj[] : users){

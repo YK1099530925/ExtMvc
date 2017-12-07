@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import extmvc.logger.MyLogger;
+
 @Controller
 public class Exit {
 
 	@RequestMapping(value="/exit")
 	public void exit(String username, HttpServletRequest request){
-		System.out.println("-------正常退出，清除session和loginUserMap-------");
+		//System.out.println("-------正常退出，清除session和loginUserMap-------");
 		HttpSession session = request.getSession();
 		String sessionId = session.getId();
 		Map<String, Boolean> sessionIds = new LinkedHashMap<>();
@@ -32,6 +34,7 @@ public class Exit {
 		}
 		session.getServletContext().setAttribute("loginUserMap", loginUserMap);
 		session.removeAttribute("userLogin");
+		MyLogger.exit.info("用户退出     --   用户名：" + username + "，退出时间：" + new Date());
 		//session.invalidate();//调用此方法，将会触发sessionDestroyed监听器，将session销毁
 	}
 	
@@ -111,8 +114,10 @@ public class Exit {
 			if(!sessionIds.get(key)){
 				//允许用户登录
 				if(isAllow){
+					MyLogger.exit.info("允许后续用户登录--用户名：" + username + "，登录时间：" + new Date());
 					sessionIds.put(key, true);
 				}else {//不允许登录
+					MyLogger.exit.info("拒绝后续用户登录--用户名：" + username + "，拒绝时间：" + new Date());
 					sessionIds.remove(key);
 				}
 				loginUserMap.put(username, sessionIds);
