@@ -1,8 +1,6 @@
 Ext.onReady(function(){
-	
 	//初始化信息提示功能
 	Ext.QuickTips.init();
-	
 /*	
 	//MessageBox是异步的，它的调用不会停止浏览器中代码的执行
 	//Ext.Msg.alert("提示","Msg逗号分隔参数列表");
@@ -151,14 +149,15 @@ Ext.onReady(function(){
 				success:function(response,options){
 					var res = Ext.JSON.decode(response.responseText);
 					if(res.success){
-						//因为如果返回-1，也是代表的真（一切不为0的数都表示真）
-						if(res.success == -1){
+						//因为如果返回-2，也是代表的真（一切不为0的数都表示真）
+						if(res.success == -2){
 							Ext.Msg.alert("提示","未允许登录，请重新登录");
 							Ext.TaskManager.stop(isLogin);
 						}else{
 							Ext.Msg.alert("isLogin","登录成功");
 							window.location.href = "views/loginSuccess.jsp";
 							Ext.TaskManager.stop(isLogin);
+							
 						}
 					}
 				},

@@ -327,18 +327,27 @@ var IsHasSession = {
 			timeout:300000,//最大等待时间
 			success:function(response,options){
 				var res = Ext.JSON.decode(response.responseText);//Json对象化
+				if(res.success == -1){
+					Ext.MessageBox.alert("提示","用户未登录",function(e){
+						var exit = false;
+						if(e == "ok"){
+							window.location.href = "../index.jsp";
+							Ext.TaskManager.stop(IsHasSession);
+						}
+					});
+				}
 				if(!res.success){
 					Ext.Msg.alert("成功","系统已超时，请重新登录...",function(){
 						window.location.href = "../index.jsp";
+						Ext.TaskManager.stop(IsHasSession);//停止该任务
 					});
-					Ext.TaskManager.stop(IsHasSession);//停止该任务
 				}
 			},
 			failure:function(response,options){
 				Ext.Msg.alert("失败","系统已超时，请重新登录...",function(){
 						window.location.href = "../index.jsp";
+						Ext.TaskManager.stop(IsHasSession);//停止该任务
 					});
-				Ext.TaskManager.stop(IsHasSession);//停止该任务
 			}
 		});
 	},
@@ -357,6 +366,15 @@ var checkHasNewUser = {
 			timeout:300000,//最大等待时间
 			success:function(response,options){
 				var res = Ext.JSON.decode(response.responseText);
+				if(res.success == -1){
+					Ext.MessageBox.alert("提示","用户未登录",function(e){
+						var exit = false;
+						if(e == "ok"){
+							window.location.href = "../index.jsp";
+							Ext.TaskManager.stop(checkHasNewUser);
+						}
+					});
+				}
 				//(返回键sessionid对应的值)如果存在则提示，并确认（如果返回了false，代表是该用户是第一个用户，能处理后续用户的登录状态）
 				if(!res.success){
 					Ext.MessageBox.confirm("提示","是否允许该用户在另一处登录</br>"+"ip地址："+res.ip+"</br>登录时间："+res.time
@@ -374,12 +392,10 @@ var checkHasNewUser = {
 								}
 							});
 					});
-				}else{
-					//如果此用户不存在了，那么停止此定时器
 				}
 			},
 			failure:function(response,options){
-				Ext.Msg.alert("错误提示","请求等待时间超时");
+				Ext.Msg.confirm("错误提示","请求等待时间超时");
 				Ext.TaskManager.stop(checkHasNewUser);
 				window.location.href="../index.jsp";
 			}

@@ -34,6 +34,7 @@ public class Exit {
 		}
 		session.getServletContext().setAttribute("loginUserMap", loginUserMap);
 		session.removeAttribute("userLogin");
+		System.out.println("------用户退出-----");
 		MyLogger.exit.info("用户退出     --   用户名：" + username + "，退出时间：" + new Date());
 		//session.invalidate();//调用此方法，将会触发sessionDestroyed监听器，将session销毁
 	}
@@ -42,28 +43,35 @@ public class Exit {
 	@RequestMapping(value="/isHasSession",method=RequestMethod.POST)
 	@ResponseBody
 	public String isHasSession(String username, String userrole, HttpServletRequest request){
-		
-		//System.out.println("username:" + username + ",userrole:" + userrole);
+		System.out.println("username:"+username+",userrole:"+userrole);
+		//首先判断用户是否为空，为空表示未登录
+		if(username.equals("") && userrole.equals("")){
+			System.out.println("issession返回-1");
+			return "{'success':-1}";
+		}
 		//获取session
 		HttpSession session = request.getSession();
 		//获取sessionid
 		String sessionId = session.getId();
 		//获取loginUserMap
 		Map<String, Map<String, Boolean>> loginUserMap = (Map<String, Map<String, Boolean>>) session.getServletContext().getAttribute("loginUserMap");
+		if(loginUserMap == null || loginUserMap.get(username) == null){
+			return "{'success':-1}";
+		}
 		Map<String, Boolean> sessionIds = new LinkedHashMap<>();
 		sessionIds = loginUserMap.get(username);
 		//如果userrole为空，表示是登录验证
-		if(userrole == null){
+		if(userrole == null || userrole.equals("")){
 			//如果此sessionid还在表示正在验证
 			if(sessionIds.containsKey(sessionId)){
 				boolean b = sessionIds.get(sessionId);
 				return "{'success':"+b+"}";
-			}else {//如果没有了此sessionid表示被删除了，因此返回-1，但是-1不是false，所以前台也会为真
-				return "{'success':-1}";
+			}else {//如果没有了此sessionid表示被删除了，因此返回-2，但是-2不是false，所以前台也会为真
+				return "{'success':-2}";
 			}
 		}
 		//这是userrole不为空，表示是判断用户是否还存在
-		if(sessionIds.containsKey(sessionId)){
+		if(sessionIds.containsKey(sessionId)){/*存在问题：当用户退出之后，点击网页返回按钮，此处报错java.lang.NullPointerException*/
 			return "{'success':true}";
 		}
 		return "{'success':false}";
@@ -72,10 +80,20 @@ public class Exit {
 	@RequestMapping(value="/checkHasNewUser",method=RequestMethod.POST)
 	@ResponseBody
 	public String checkHasNewUser(String username,HttpServletRequest request){
+		System.out.println("username:"+username);
+		//首先判断用户是否为空，为空表示未登录
+		if(username.equals("")){
+			System.out.println("check -1");
+			return "{'success':-1}";
+		}
 		HttpSession session = request.getSession();
 		String sessionId = session.getId();
 		Map<String, Map<String, Boolean>> loginUserMap = (Map<String, Map<String, Boolean>>) session.getServletContext().getAttribute("loginUserMap");
+		if(loginUserMap == null || loginUserMap.get(username) == null){
+			return "{'success':-1}";
+		}
 		Map<String, Boolean> sessionIds = loginUserMap.get(username);
+		
 		//获取后面一个用户登录的时间
 		Map<String, Object> loginTime = (Map<String, Object>) session.getServletContext().getAttribute("loginTime");
 		Date time = (Date) loginTime.get(username);
@@ -83,6 +101,7 @@ public class Exit {
 		Map<String, Object> loginUserIp = (Map<String, Object>) session.getServletContext().getAttribute("loginUserIp");
 		String ip = "";
 		int i = 0;
+		/*存在问题：当用户退出之后，点击网页返回按钮，此处报错java.lang.NullPointerException*/
 		for(String key : sessionIds.keySet()){
 			i++;
 			//判断是否是第一个登录的用户，是才有权限处理后续用户的登录
@@ -92,14 +111,16 @@ public class Exit {
 					if(!sessionIds.get(key1)){
 						ip = (String) loginUserIp.get(key1);
 						return "{'success':false,'ip':'"+ip+"','time':'"+time.toString()+"'}";
-						//return "{'success':false}";
+					}else {
+						return "{'success':true}";
 					}
 				}
 			}else if(key.equals(sessionId) && i > 1){//如果不是第一个用户，则返回true，不做任何处理
 				return "{'success':true}";
 			}
 		}
-		return "{'success':true}";
+		System.out.println("check没有此sessionid返回-1");
+		return "{'success':-1}";
 	}
 	
 	@RequestMapping(value="/isAllowLogin",method=RequestMethod.POST)
