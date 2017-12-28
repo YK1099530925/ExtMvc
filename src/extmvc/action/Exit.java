@@ -34,7 +34,6 @@ public class Exit {
 		}
 		session.getServletContext().setAttribute("loginUserMap", loginUserMap);
 		session.removeAttribute("userLogin");
-		System.out.println("------用户退出-----");
 		MyLogger.exit.info("用户退出     --   用户名：" + username + "，退出时间：" + new Date());
 		//session.invalidate();//调用此方法，将会触发sessionDestroyed监听器，将session销毁
 	}
@@ -43,7 +42,6 @@ public class Exit {
 	@RequestMapping(value="/isHasSession",method=RequestMethod.POST)
 	@ResponseBody
 	public String isHasSession(String username, String userrole, HttpServletRequest request){
-		System.out.println("username:"+username+",userrole:"+userrole);
 		//首先判断用户是否为空，为空表示未登录
 		if(username.equals("") && userrole.equals("")){
 			System.out.println("issession返回-1");
@@ -80,7 +78,6 @@ public class Exit {
 	@RequestMapping(value="/checkHasNewUser",method=RequestMethod.POST)
 	@ResponseBody
 	public String checkHasNewUser(String username,HttpServletRequest request){
-		System.out.println("username:"+username);
 		//首先判断用户是否为空，为空表示未登录
 		if(username.equals("")){
 			System.out.println("check -1");
@@ -111,16 +108,14 @@ public class Exit {
 					if(!sessionIds.get(key1)){
 						ip = (String) loginUserIp.get(key1);
 						return "{'success':false,'ip':'"+ip+"','time':'"+time.toString()+"'}";
-					}else {
-						return "{'success':true}";
 					}
 				}
 			}else if(key.equals(sessionId) && i > 1){//如果不是第一个用户，则返回true，不做任何处理
 				return "{'success':true}";
 			}
 		}
-		System.out.println("check没有此sessionid返回-1");
-		return "{'success':-1}";
+		//如果从这儿返回表示已经登录了的用户并且前面没有做任何处理
+		return "{'success':true}";
 	}
 	
 	@RequestMapping(value="/isAllowLogin",method=RequestMethod.POST)

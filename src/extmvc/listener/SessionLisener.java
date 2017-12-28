@@ -20,7 +20,6 @@ public class SessionLisener implements HttpSessionListener {
 		System.out.println("-----销毁session-----");
 		HttpSession session = sessionEvent.getSession();
 		String sessionId = session.getId();
-		System.out.println("将要销毁的sessionId:" + sessionId);
 		//在session销毁的时候将loginUserMap中的键值对清楚
 		UserLogin user = (UserLogin) session.getAttribute("userLogin");
 		if (user != null) {

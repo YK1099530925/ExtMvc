@@ -41,7 +41,6 @@ public class UserLoginLimiteTest {
 			sessionIds = loginUserMap.get(username);
 			//System.out.println(sessionIds);
 			if(sessionIds.containsKey(sessionId) && sessionIds.get(sessionId)){
-				System.out.println("此次登录还未退出");
 				return "success";
 			}
 			//第二次外地登录，先将其设置为false，等待第一个用户验证
@@ -56,7 +55,6 @@ public class UserLoginLimiteTest {
 			return "false";
 		}
 		//以下操作表示用户第一次登录
-		//System.out.println("用户第一次登录");
 		MyLogger.userLoginLimiteTest.info("用户首次登录  --  用户名：" + username + "，登录时间：" + new Date() + "，登录ip：" + ip);
 		loginUserIp.put(sessionId, ip);
 		request.getSession().getServletContext().setAttribute("loginUserIp", loginUserIp);

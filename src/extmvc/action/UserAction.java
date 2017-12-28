@@ -72,8 +72,6 @@ public class UserAction {
 			msg = "{success:false,msg:'登录失败，用户名或者密码错误'}";
 			return msg;
 		}
-		//判断用户是否在线及处理
-		//String limite = loginLimite.userLoginLimite(username, request);
 		//如果为false则表示需要第一个用户验证，为true则直接登录
 		String limite = loginLimiteTest.userLoginLimite(username, request);
 		msg = msg + ",'limite':'" + limite + "'}";
@@ -190,7 +188,6 @@ public class UserAction {
 			produces="application/json;charset=utf-8")
 	@ResponseBody
 	public String deleteUser(Integer id){
-		System.out.println("id:"+id);
 		baseService.deleteUser(id);
 		return "{'data':'删除成功'}";
 	}
